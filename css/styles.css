@@ -1,0 +1,6 @@
+.main {
+    display: flex;
+    flex-flow: column wrap;
+    place-content: center center;
+    font-family: courier;
+}
