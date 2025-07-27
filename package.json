@@ -1,8 +1,8 @@
 {
   "dependencies": {
     "@11ty/eleventy-img": "^6.0.4"
-  }
-  "scripts": {
-    "build": "eleventy"
   },
+  "scripts": {
+    "build-ghpages": "npx @11ty/eleventy --pathprefix=/your-repo-name/",
+  }
 }
