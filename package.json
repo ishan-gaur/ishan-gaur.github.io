@@ -1,5 +1,5 @@
 {
-  type": "module",
+  "type": "module",
   "dependencies": {
     "@11ty/eleventy-img": "^6.0.4"
   },
