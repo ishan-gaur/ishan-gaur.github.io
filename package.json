@@ -2,4 +2,7 @@
   "dependencies": {
     "@11ty/eleventy-img": "^6.0.4"
   }
+  "scripts": {
+    "build": "eleventy"
+  },
 }
