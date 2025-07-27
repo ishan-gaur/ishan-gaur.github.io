@@ -1,0 +1,13 @@
+<div class="paper">
+  <h3>{{ paper.data.title }}</h3>
+  <p><em>
+    {{ paper.data.venue }}, {{ paper.data.pub_date }}
+    {% if paper.data.awards %}
+      ({{ paper.data.awards }})
+    {% endif %}
+  </em></p>
+  <p>{{ paper.data.authors }}</p>
+  {% if paper.data.equal_contribution_note %}
+    <p class="note">{{ paper.data.equal_contribution_note }}</p>
+  {% endif %}
+</div>
