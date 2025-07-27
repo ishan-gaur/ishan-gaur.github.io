@@ -3,6 +3,6 @@
     "@11ty/eleventy-img": "^6.0.4"
   },
   "scripts": {
-    "build-ghpages": "npx @11ty/eleventy --pathprefix=/ishan-gaur.github.io/",
+    "build-ghpages": "npx @11ty/eleventy --pathprefix=/ishan-gaur.github.io/"
   }
 }
