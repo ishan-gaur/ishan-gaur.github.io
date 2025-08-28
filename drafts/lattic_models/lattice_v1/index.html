@@ -1,0 +1,48 @@
+<p>The core question of this article is: when we train a model to generate a sequence from a list of masked tokens, what should it generate?</p>
+<p>Let's start with a thought experiment. Suppose we are trying to create a generative model of length-2 binary strings.</p>
+<p>Considerations:</p>
+<ul>
+<li>Do we make sure all ways of getting to the same result are equally probably?
+<ul>
+<li>Path concentration is like a mode covering vs seeking model in terms of KL</li>
+<li>Maybe connect this</li>
+</ul>
+</li>
+<li>Do we model the fact that we are training on an empirical sample from the real distribution?</li>
+<li>Do we model the fact that the real distribution is not stationary and is also evolving over time?</li>
+</ul>
+<p>Generative model paradigms:</p>
+<ul>
+<li>direct simulation using user-specified initial condition
+<ul>
+<li>Related is transport from one condition to the next</li>
+</ul>
+</li>
+<li>simulation with distributions for places of uncertainty to get a range of possible outcomes</li>
+<li>actually simulate the process of generating something by mapping a set of input conditions to something that can be sampled according to a known distribution: reduction of a distribution to transport+a simpler (known) distribution. What does it even mean to take away so much of the structure that the target distribution is no longer connected to the original problem--like masking, uniform, or gaussian?</li>
+<li>Optimization of a target score over a feasible region defined by constraints</li>
+<li>Markov chain that travels between all the known states according to some stationary distribution.</li>
+<li>What other old paradigms are there?</li>
+<li>What if we think of generative models and modeling evolution?</li>
+<li>The real system being modeled can perhaps be thought of as a set of boundary
+conditions on what is possible, a state and time dependent propagation process,
+and a state and time dependent, probabilitistic selection criteria.</li>
+</ul>
+<p>Discrete Unmasking Models are a class of related methods that essentially seek to convert a fully masked sequence of known length[^1] into a sequence that is reasonable for that domain.</p>
+<p>Need to do more research on the learning algorithms that are used and the types of models.</p>
+<p>What is the general mathematical structure describing these geometries?</p>
+<ul>
+<li>I think you can embed them in a hyperbolic space.</li>
+<li>Obv I think of this as a lattice or crystal</li>
+<li>There must be language for this in combinatorics</li>
+<li>It can also be thought of as moving in the simplex of distributions and jumping to &quot;facets&quot;?? I think of the simplex--which is marginalizing or something?</li>
+<li>What is the connection to continuous models?
+<ul>
+<li>Can you think of this as a simplex where you have products over infinite states</li>
+<li>This gives you total continuity and somehow makes things easier--why?</li>
+</ul>
+</li>
+<li>What is the connection to graph generation?</li>
+</ul>
+<p>[^1]: EditFlows should be included?
+[^2]: Can reference that Theis paper on what makes for a good image. Don't want to find an image from the real world--(simulating the whole globe and the act of taking images and of being added to the dataset)--this would just copy the dataset entirely. We actually are looking for something that is much more subtle and worse defined.</p>

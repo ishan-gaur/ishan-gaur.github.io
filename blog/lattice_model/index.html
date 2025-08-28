@@ -1,0 +1,36 @@
+<h1>Defining the Generative Modeling Problem for Discrete Masking Models</h1>
+<p>This is a blog post about generative models that are essentially time-inhomogenous markov chains. [^1] These include any-order autoregressive models (AO-ARM), discrete diffusion models (DDM), and discrete flow-matching models (DFM). Here we will focus on models that are used to define markov chains over the space of masked sequences. [^2] We will additionally assume that the simulation process is defined to terminate in some way (but perhaps in an unbounded number of steps [^3,^4]), where the distribution over end-states is somehow useful for generative modeling.</p>
+<h2>Toy Problem</h2>
+<p>Even though these models can operate in continuous or discrete time, we can often map them to a discrete time markov chain.[^6] What then becomes interesting is looking at the geometry[^5] of the underlying states and the resulting transition probability distributions. Consider the following space, which shows all the valid transitions for an unmasking model operating on a length-2 binary string.</p>
+<p><picture><source type="image/webp" srcset="/.11ty/image/?src=img%2Fbase_lattice.svg&width=1275&format=webp&via=transform 1275w"><img src="/.11ty/image/?src=img%2Fbase_lattice.svg&width=1275&format=jpeg&via=transform" alt="baselattice" width="1275" height="1114"></picture></p>
+<p>Now let's say that we are trying to train a generative model over this space. Let's say we want it to produce sequences where the second position is always 1. This means it should output &quot;0, 1&quot; or &quot;1, 1&quot; and not &quot;0, 0&quot; or &quot;1, 0&quot;. What should be the resulting transition probability distribution? Because there are so many edges, we can imagine two possibilities, one where each path to an output node has the same probability as any other, and another where the probability concentrates as much as possible.</p>
+<p><picture><source type="image/webp" srcset="/.11ty/image/?src=img%2Fbalanced_paths.svg&width=1477&format=webp&via=transform 1477w"><img src="/.11ty/image/?src=img%2Fbalanced_paths.svg&width=1477&format=jpeg&via=transform" alt="balancedpaths" width="1477" height="1317"></picture>
+<picture><source type="image/webp" srcset="/.11ty/image/?src=img%2Fconcentrated_paths.svg&width=1477&format=webp&via=transform 1477w"><img src="/.11ty/image/?src=img%2Fconcentrated_paths.svg&width=1477&format=jpeg&via=transform" alt="concentrated" width="1477" height="1317"></picture></p>
+<p>Concentrating the paths might be useful if we assume a trembling hand model or some other perturbation of the transition distribution (e.g. guidance). Having the paths concentrate would means that it is hard for the guidance model to impact the rates enough to make the generative model start exploring an unfeasible sequence space. Another way to think about this is that we use softmaxes in practice so certain paths are never completely eliminated. In such a case, do we want to allow ourselves to be &quot;mode-covering&quot; and potentially err on the side of sampling things that are wrong, or do we want to push the model towards being more &quot;mode-seeking&quot; even if it means we lose some</p>
+<p>There are also other design decisions. For example, the &quot;?&quot; symbols indicate an edge that would never be trained with standard diffusion/flow-matching training. Since the probability of observing the source states for those edges (&quot;_0&quot;) is zero and all final states descended from that state (&quot;00&quot;, and &quot;10&quot;) also have probability zero, the conditional probability of $P(<code>00&quot; | </code>_0&quot;)$ or $P(<code>00&quot; | </code>_0&quot;)$ is undefined. For example, if we have some amount of epistemic uncertainty, and there is a possibility we would discover a small probability $p$ of sampling $<code>00&quot;$ form the data, it might be a good idea to make the &quot;?&quot; both $0.5$. That way, as soon as I see $</code>00&quot;$ in the data, I will get gradients to reduce $P(<code>10&quot;|</code>_0&quot;)$ and to increase $P(<code>\_0&quot;|</code>__&quot;)$. [^7] However, we can see in the case of concentrated paths that I actually do have information about the endpoints else where in the transition graph and that $P(<code>01&quot; | </code>0_&quot;)$ should probably be 1, just like in the balanced path case.</p>
+<p>Finally, the distribution of the empirical distribution might be induced by some sort of time evolution of an initial set of samples according to some underlying reward function. [^8] How do we have the model generalize the underlying reward if its training tries to make it match the empirical distribution?</p>
+<p>uniformity is good for being able to pick paths arbitrarily</p>
+<ul>
+<li>also seems to be better at adapting to later learning signal
+concentration is good for trembling hand problem</li>
+<li>so long as you actually train on everything so the question marks go away
+<ul>
+<li>in this sense the uniformity is a good thing because arbitrary paths means you need to get the conditionals right everywhere</li>
+</ul>
+</li>
+<li>this could be nice for guidance because the number of paths is limited</li>
+<li>constraints are also set first, but that is why you lose the ability to pick paths arbitrarily</li>
+</ul>
+<h2>Design Decisions for a Generative Model</h2>
+<p>Summarizing the above section we see the following design parameters we must decide:</p>
+<ol>
+<li>Should the distribution</li>
+</ol>
+<p>[^1] Can also think of them as general denoisers but we use them to execute random runs of a markov chain. LLM people think of learning as compression. Sampling is optimization.</p>
+<p>[^2] There are also uniform noise processes and other noise distributions. Sometimes, the distribution is sampled by training a model such that the stationary distribution of the markov chain approximates samples from the desired distribution. For example, this is the case for models that take a random string and &quot;denoise&quot; it to look more like something that came from the data.</p>
+<p>[^3] In the uniform case, you are not guaranteed to have a set number of transitions.</p>
+<p>[^4] You can also have processes that jump around the denoised time or, like diffusion models, the limiting noise distribution is not actually started with because at lives at $t=\infty$.</p>
+<p>[^5] I think this can be called a net bundle where you have a <em>fiber</em> which is a boolean lattice for each possible string.</p>
+<p>[^6] When is this the case?</p>
+<p>[^7] Note for the model, each data-point has equal probability and every other point (in terms of the loss) is $0$.</p>
+<p>[^8] This actual protein evolution over time, changes in images over the course of the last 200 years, or having a LLM generalize beyond a known mathematical result.</p>
