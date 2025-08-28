@@ -1,6 +1,6 @@
 ---
 title: Multimodal cell maps as a foundation for structural and functional genomics
-authors: Leah V Schaffer, Mengzhou Hu, Gege Qian, Kyung-Mee Moon, Abantika Pal, Neelesh Soni, Andrew P Latham, Laura Pontano Vaites, Dorothy Tsai, Nicole M Mattson, Katherine Licon, Robin Bachelder, Anthony Cesnik, <strong>Ishan Gaur</strong>, Trang Le, William Leineweber, Aji Palar, Ernst Pulido, Yue Qin, Xiaoyu Zhao, Christopher Churas, Joanna Lenkiewicz, Jing Chen, Keiichiro Ono, Dexter Pratt, Peter Zage, Ignacia Echeverria, Andrej Sali, J Wade Harper, Steven P Gygi, Leonard J Foster, Edward L Huttlin, Emma Lundberg, Trey Ideker
+authors: Leah V Schaffer, Mengzhou Hu, Gege Qian, Kyung-Mee Moon, Abantika Pal, Neelesh Soni, Andrew P Latham, Laura Pontano Vaites, Dorothy Tsai, Nicole M Mattson, Katherine Licon, Robin Bachelder, Anthony Cesnik, <u>Ishan Gaur</u>, Trang Le, William Leineweber, Aji Palar, Ernst Pulido, Yue Qin, Xiaoyu Zhao, Christopher Churas, Joanna Lenkiewicz, Jing Chen, Keiichiro Ono, Dexter Pratt, Peter Zage, Ignacia Echeverria, Andrej Sali, J Wade Harper, Steven P Gygi, Leonard J Foster, Edward L Huttlin, Emma Lundberg, Trey Ideker
 pub_date: April 9, 2025
 sort_date: 2025-04-09
 venue: Nature

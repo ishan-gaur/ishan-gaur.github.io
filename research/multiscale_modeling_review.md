@@ -1,6 +1,6 @@
 ---
 title: Mapping the Multiscale Proteomic Organization of Cellular and Disease Phenotypes
-authors: Anthony Cesnik<sup>*</sup>, Leah V Schaffer<sup>*</sup>, <strong>Ishan Gaur</strong>, Mayank Jain, Trey Ideker, Emma Lundberg
+authors: Anthony Cesnik<sup>*</sup>, Leah V Schaffer<sup>*</sup>, <u>Ishan Gaur</u>, Mayank Jain, Trey Ideker, Emma Lundberg
 equal_contribution_note: "* Equal contribution"
 pub_date: May 15, 2024
 sort_date: 2024-05-15
