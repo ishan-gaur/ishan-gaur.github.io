@@ -1,18 +1,13 @@
 <section>
-<p><strong>{{ paper.data.title }}</strong></p>
-<p><em>
-{{ paper.data.venue }}, {{ paper.data.pub_date }}
-{% if paper.data.awards %}
-    ({{ paper.data.awards }})
-{% endif %}
-</em></p>
-<p>{{ paper.data.authors }}</p>
-{% if paper.data.equal_contribution_note %}
-{% endif %}
-{% if paper.data.links %}
-{%- for link in paper.data.links -%}
-    <a href="{{ link.url }}" target="_blank">{{ link.text }}</a>
-    {%- unless forloop.last %} | {% endunless -%}
-{%- endfor -%}
-{% endif %}
+    <p>
+    <strong>{{ paper.data.title }}</strong><br>
+    <em>{{ paper.data.venue }}, {{ paper.data.pub_date }}{% if paper.data.awards %} ({{ paper.data.awards }}){% endif %}</em><br>
+    {{ paper.data.authors }}
+    {% if paper.data.links %}<br>
+    {%- for link in paper.data.links -%}
+        <a href="{{ link.url }}" target="_blank">{{ link.text }}</a>
+        {%- unless forloop.last %} | {% endunless -%}
+    {%- endfor -%}
+    {% endif %}
+    </p>
 </section>
