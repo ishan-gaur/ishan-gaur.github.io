@@ -1,7 +1,9 @@
 {
   "type": "module",
   "dependencies": {
-    "@11ty/eleventy-img": "^6.0.4"
+    "@11ty/eleventy-img": "^6.0.4",
+    "markdown-it": "^14.1.0",
+    "markdown-it-image-figures": "^2.1.1"
   },
   "scripts": {
     "build-ghpages": "npx @11ty/eleventy"

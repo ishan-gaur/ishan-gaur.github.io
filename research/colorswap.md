@@ -2,6 +2,7 @@
 title: "ColorSwap: A Color and Word Order Dataset for Multimodal Evaluation"
 authors: Jirayu Burapacheep, <strong>Ishan Gaur</strong>, Agam Bhatia, Tristan Thrush
 pub_date: Aug 6, 2024
+sort_date: 2024-08-06
 venue: ACL
 links: [
   {

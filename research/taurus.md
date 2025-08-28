@@ -2,6 +2,7 @@
 title: "Taurus: A Data Plane Architecture for Per-Packet ML"
 authors: Tushar Swamy, Alexander Rucker, Muhammad Shahbaz, <strong>Ishan Gaur</strong>, Kunle Olukotun
 pub_date: Feb 28, 2022
+sort_date: 2022-02-28
 venue: ASPLOS
 awards: IETF Applied Networking Research Prize
 links: [

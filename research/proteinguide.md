@@ -2,6 +2,7 @@
 title: Guide your favorite protein sequence generative model
 venue: arXiv preprint arXiv:2505.04823
 pub_date: May 7, 2025
+sort_date: 2025-05-07
 authors: Junhao Xiong<sup>*</sup>, Hunter Nisonoff<sup>*</sup>, Maria Lukarska<sup>*</sup>, <strong>Ishan Gaur<sup>*</sup></strong>, Luke M Oltrogge, David F Savage, Jennifer Listgarten
 equal_contribution_note: "* Equal contribution"
 links: [

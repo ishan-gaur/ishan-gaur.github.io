@@ -1,22 +1,19 @@
 ---
-title: Multimodal cell maps as a foundation for structural and functional genomics
-authors: Leah V Schaffer, Mengzhou Hu, Gege Qian, Kyung-Mee Moon, Abantika Pal, Neelesh Soni, Andrew P Latham, Laura Pontano Vaites, Dorothy Tsai, Nicole M Mattson, Katherine Licon, Robin Bachelder, Anthony Cesnik, <strong>Ishan Gaur</strong>, Trang Le, William Leineweber, Aji Palar, Ernst Pulido, Yue Qin, Xiaoyu Zhao, Christopher Churas, Joanna Lenkiewicz, Jing Chen, Keiichiro Ono, Dexter Pratt, Peter Zage, Ignacia Echeverria, Andrej Sali, J Wade Harper, Steven P Gygi, Leonard J Foster, Edward L Huttlin, Emma Lundberg, Trey Ideker
-pub_date: April 9, 2025
-venue: Nature
+title: A Cell-Cycle Resolved Multi-Scale Map of the Cell
+authors: <strong>Ishan Gaur</strong>, Trang Le, Emma Lundberg
+pub_date: January 3, 2024
+sort_date: 2024-01-03
+venue: Poster at Pacific Symposium on Biocomputing
 links: [
   {
-    url: https://www.nature.com/articles/s41586-025-08878-3,
-    text: Paper
+    url: ./assets/music3_poster.jpg,
+    text: Poster
   },
   {
-    url: https://musicmaps.ai/u2os-cellmap,
-    text: Website
-  },
-  {
-    url: https://musicmaps.ai/u2os-cellmap,
+    url: ./misc/music3_code,
     text: Code
   }
 ]
 tags: paper
 ---
-Human cells consist of a complex hierarchy of components, many of which remain unexplored1,2. Here we construct a global map of human subcellular architecture through joint measurement of biophysical interactions and immunofluorescence images for over 5,100 proteins in U2OS osteosarcoma cells. Self-supervised multimodal data integration resolves 275 molecular assemblies spanning the range of 10−8 to 10−5 m, which we validate systematically using whole-cell size-exclusion chromatography and annotate using large language models3. We explore key applications in structural biology, yielding structures for 111 heterodimeric complexes and an expanded Rag–Ragulator assembly. The map assigns unexpected functions to 975 proteins, including roles for C18orf21 in RNA processing and DPP9 in interferon signalling, and identifies assemblies with multiple localizations or cell type specificity. It decodes paediatric cancer genomes4, identifying 21 recurrently mutated assemblies and implicating 102 validated new cancer proteins. The associated Cell Visualization Portal and Mapping Toolkit provide a reference platform for structural and functional cell biology.
+A large fraction of the human proteome displays significant cell-to-cell variability, but how this variability impacts functional assemblies across biological scales is poorly understood. In this work, we explore cell-cycle–dependent variation in the U2-OS cell line by building MuSIC hierarchies for cells in G1, the G1–S transition, and G2. MuSIC maps integrate immunofluorescence imaging and affinity-purification mass spectrometry data to predict a structural hierarchy of components constituting the cell. Using a pseudotime model trained to predict FUCCI marker dynamics from DAPI and tubulin reference channels, we are able to sample single-cell imaging data by cell-cycle phase to generate phase-specific maps. Examining these proteome-scale variations, we show that cell-cycle–dependent components form, dissolve, and translocate between phases across all scales. Using SC embeddings, we also find components that multilocalize across different organelles or show different robustness across cell-cycle phases. This method provides a general framework to model dynamic changes in cell physiology across disease or drug perturbations, environmental changes, or patient heterogeneity.
