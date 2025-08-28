@@ -3,6 +3,7 @@ title: Mapping the Multiscale Proteomic Organization of Cellular and Disease Phe
 authors: Anthony Cesnik<sup>*</sup>, Leah V Schaffer<sup>*</sup>, <strong>Ishan Gaur</strong>, Mayank Jain, Trey Ideker, Emma Lundberg
 equal_contribution_note: "* Equal contribution"
 pub_date: May 15, 2024
+sort_date: 2024-05-15
 venue: Annual Review of Biomedical Data Science
 links: [
   {
