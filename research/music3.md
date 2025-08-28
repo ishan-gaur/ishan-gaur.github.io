@@ -1,6 +1,6 @@
 ---
 title: A Cell-Cycle Resolved Multi-Scale Map of the Cell
-authors: <strong>Ishan Gaur</strong>, Trang Le, Emma Lundberg
+authors: <u>Ishan Gaur</u>, Trang Le, Emma Lundberg
 pub_date: January 3, 2024
 sort_date: 2024-01-03
 venue: Poster at Pacific Symposium on Biocomputing

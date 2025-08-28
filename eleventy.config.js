@@ -9,6 +9,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addPlugin(eleventyImageTransformPlugin);
 
   // Copying non-template content to _site
+  eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("misc");
   eleventyConfig.addPassthroughCopy("assets");
 }
