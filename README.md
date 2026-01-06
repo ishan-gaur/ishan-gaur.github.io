@@ -1,12 +1,12 @@
 # Personal Website
 
 ## TODO
-- Try side notes with the paper, website, and code links for papers
-- Check everything in Aviv list is in the info
-- Add nav bar with home, papers, blog, bookshelf, and misc
-  - Make hide nav bar elements until added, start with papers just anchored to existing papers section
 - Add pictures for each of the publications and make title a clickable link to md files
   - Add a layout file for these
+- Check everything in Aviv list is in the info
+- Try side notes with the paper, website, and code links for papers
+- Add nav bar with home, papers, blog, bookshelf, and misc
+  - Make hide nav bar elements until added, start with papers just anchored to existing papers section
 - Mention organizing faculty committee work?
 - Make an actual blog page
 - Make font slightly smaller and add information about startup stuff in college
