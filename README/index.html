@@ -1,6 +1,23 @@
 <h1>Personal Website</h1>
+<h2>Preview Website</h2>
+<pre><code class="language-bash">npx @11ty/eleventy --serve
+</code></pre>
+<h2>Deployment</h2>
+<p>Source code lives in the <code>ishangaur</code> repo (<code>origin</code>). The site is served from the <code>ishan-gaur.github.io</code> repo (<code>github-pages</code> remote).</p>
+<p><strong>Current workflow to deploy:</strong></p>
+<ol>
+<li>Push changes to <code>origin main</code> as usual (<code>git push origin main</code>).</li>
+<li>The GitHub Actions workflow (<code>.github/workflows/deploy-to-ghpages.yml</code>) builds the site with Eleventy and deploys the <code>_site</code> output to the <code>gh-pages</code> branch on <code>origin</code> (i.e., the <code>ishangaur</code> repo).</li>
+<li>To actually update <code>ishan-gaur.github.io</code>, you need to <strong>manually push</strong> to the <code>github-pages</code> remote:<pre><code class="language-bash">git push github-pages main
+</code></pre>
+And also push the built <code>gh-pages</code> branch there:<pre><code class="language-bash">git push github-pages gh-pages
+</code></pre>
+Then make sure GitHub Pages for <code>ishan-gaur.github.io</code> is configured to serve from the <code>gh-pages</code> branch.</li>
+</ol>
+<p><strong>Note:</strong> Without step 3, changes only deploy to <code>ishan-gaur.github.io/ishangaur</code> (the project pages URL for the <code>ishangaur</code> repo), not to <code>ishan-gaur.github.io</code>.</p>
 <h2>TODO</h2>
 <ul>
+<li>Update the deploy workflow to push directly to <code>ishan-gaur.github.io</code> — add <code>external_repository: ishan-gaur/ishan-gaur.github.io</code> and a <code>personal_token</code> secret to the <code>peaceiris/actions-gh-pages</code> step so deploys go to the right place automatically</li>
 <li>Add pictures for each of the publications and make title a clickable link to md files
 <ul>
 <li>Add a layout file for these</li>
