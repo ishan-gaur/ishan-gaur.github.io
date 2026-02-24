@@ -28,6 +28,15 @@ I am also an [EECS peer](https://peers.eecs.berkeley.edu/) and help run the [BAI
 
 <section>
 
+## What's New?
+
+- [2/23] We just put out a [small library called DFM](https://github.com/ishan-gaur/dfm) for wrapping discrete generative models and using them with ProteinGuide. Eventually we will support most common MLMs and discrete diffusion models out of the box. These are special cases of discrete flow matching models, hence the name. The goal is to provide a package that improves interoperability for models, samplers, guidance, and finetuning algorithms in this space.
+- [2/23] ProteinGuide talk at [Profluent](https://www.profluent.bio/): [Bear Xiong](https://x.com/junhaobearxiong?lang=en) and I gave a talk on our new preprint of [ProteinGuide](https://arxiv.org/abs/2505.04823b)
+
+</section>
+
+<section>
+
 ## Research
 
 </section>
