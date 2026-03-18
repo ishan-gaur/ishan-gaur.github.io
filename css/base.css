@@ -486,3 +486,20 @@ label.margin-toggle:not(.sidenote-number) {
         width: 100%;
     }
 }
+
+
+/* Site navigation */
+nav.site-nav {
+   padding-top: 2rem;
+   font-size: 1.4rem;
+}
+
+nav.site-nav a {
+   margin-right: 1.5rem;
+   text-decoration: none;
+}
+
+nav.site-nav a:hover {
+   text-decoration: underline;
+   text-underline-offset: 0.15em;
+}
