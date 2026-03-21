@@ -8,12 +8,10 @@ layout: base.liquid
 
 Hi, I'm Ishan.
 
-[Github](https://github.com/ishan-gaur)
 [Twitter](https://x.com/Ishan__Gaur)
-[LinkedIn](https://www.linkedin.com/in/ishangaur/)
+[Email](ishang@berkley.edu)
 [Scholar](https://scholar.google.com/citations?user=PgW-8YIAAAAJ&hl=en)
-
-</section>
+[Code](https://github.com/ishan-gaur)
 
 <section>
 
