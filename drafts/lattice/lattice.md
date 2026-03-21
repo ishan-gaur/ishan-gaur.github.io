@@ -7,14 +7,11 @@ This is a blog post about generative models that are essentially time-inhomogeno
 Even though these models can operate in continuous or discrete time, we can often map them to a discrete time markov chain.[^6] What then becomes interesting is looking at the geometry[^5] of the underlying states and the resulting transition probability distributions. Consider the following space, which shows all the valid transitions for an unmasking model operating on a length-2 binary string.
 
 ![baselattice](base_lattice.svg)
-<!-- ![baselattice](../img/base_lattice.svg) -->
 
 Now let's say that we are trying to train a generative model over this space. Let's say we want it to produce sequences where the second position is always 1. This means it should output "0, 1" or "1, 1" and not "0, 0" or "1, 0". What should be the resulting transition probability distribution? Because there are so many edges, we can imagine two possibilities, one where each path to an output node has the same probability as any other, and another where the probability concentrates as much as possible.
 
 ![balancedpaths](balanced_paths.svg)
 ![concentrated](concentrated_paths.svg)
-<!-- ![balancedpaths](../img/balanced_paths.svg) -->
-<!-- ![concentrated](../img/concentrated_paths.svg) -->
 
 Both have the same distribution over the unmasked positions but totally different distributions over the intermediate states. We can also imagine that there is a full spectrum of solutions interpolating between these two as well. [^9]
 
@@ -42,7 +39,6 @@ Summarizing the above section we see the following design choices:
 Current models must deal with any denoising order, but empirically show better results for some decoding order over others. [^10] We also know that they factor their unmasking distribution by position. In doing so, there is again both a balancing and a concentrated solution. 
 
 ![flowsolution](factored_balance.svg)
-<!-- ![flowsolution](../img/factored_balance.svg) -->
 
 Interestingly, for paths that start with unmasking the first position, you may notice that the probabilities are proportional to the corresponding conditional distributions for the balanced solution, but for paths that mutate the second position, the probabilities look like the concentrated solution. Still, the probabilities of each path are uniform.
 
@@ -57,7 +53,6 @@ In the continuous case, we have some theoretical lines of work that confirm the 
 In the discrete case, we might not be as sure. When training the models, we pick an unmasked string, a number of positions masked, and the set of masked positions all uniformly at random. This means that the from the beginning, if there is some extra reward weighting on top of our empirical distribution, we are definitely not learning it--at least not by construction. Let's continue on, however, assuming that we somehow sample the end sequence according to this reward.
 
 ![mask_states](mask_state_probs.svg)
-<!-- ![mask_states](../img/mask_state_probs.svg) -->
 
 Once we choose a masked sequence, because of the assumption that the distribution of transitions factors into the product of the position-wise marginals all weighted equally, we can train each of them individually with cross entropy. However, we only give them signal from the final sequence. For example, if we sample "11" and fully masked, then the model gets signal to set "\_1" and "1\_" to 1/4 and "0\_" and "\_0" to 0. When we sample "01", we similarly set "\_0" and "\_1" to 1/4 and "1\_" and "0\_" to 0.
 

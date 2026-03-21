@@ -1,6 +1,8 @@
 import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
-// import markdownIt from "markdown-it";
-// import mdfigcaption from "markdown-it-image-figures";
+import markdownIt from "markdown-it";
+import mdfigcaption from "markdown-it-image-figures";
+import mdFootnote from "markdown-it-footnote";
+import mdAttrs from "markdown-it-attrs";
 
 export default function (eleventyConfig) {
   // Output directory: _site
@@ -8,19 +10,24 @@ export default function (eleventyConfig) {
   // Plugins
   eleventyConfig.addPlugin(eleventyImageTransformPlugin);
 
+  // Markdown library
+  const mdLib = markdownIt(options).use(mdfigcaption, figoptions).use(mdFootnote).use(mdAttrs);
+  eleventyConfig.setLibrary("md", mdLib);
+
+  // Sidenote shortcode: {% sidenote "content" %}
+  let sidenoteCount = 0;
+  eleventyConfig.addShortcode("sidenote", function(content) {
+    const id = `sn-${++sidenoteCount}`;
+    return `<label for="${id}" class="margin-toggle sidenote-number"></label><input type="checkbox" id="${id}" class="margin-toggle"/><span class="sidenote">${content}</span>`;
+  });
+
   // Copying non-template content to _site
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("misc");
   eleventyConfig.addPassthroughCopy("assets");
 }
 
-let options = {};
+let options = { html: true };
 let figoptions = {
   figcaption: true,
 };
-
-// const mdLib = markdownIt(options).use(mdfigcaption, figoptions);
-
-// module.exports = function (config) {
-//   config.setLibrary("md", mdLib);
-// };
