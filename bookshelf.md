@@ -7,7 +7,7 @@ layout: base.liquid
 
 ## Bookshelf
 
-The books I own or remember reading at some point, in no particular order. If I haven't read it yet, the subtitle and author are not included. For the ones where I recall, I've also included who I heard about the book from.
+The books I own or remember reading at some point, in no particular order. If I haven't read it yet, the subtitle and author are not included. For the ones where I recall, I've also included who I heard about the book from. I also have a <a href="#reading-list-links">list of links</a> to other reading lists I follow at the end.
 
 - The Dappled World: A Study of the Boundaries of Science (Natalie Cartwright)
 - The Divide: Global Inequality from Conquest to Free Markets (Jason Hickel){% sidenote "Recommended by Jay Mathuri" %}
@@ -35,4 +35,8 @@ The books I own or remember reading at some point, in no particular order. If I 
 - Sophie's World{% sidenote "Recommended by [Vikas Divyakirti](https://www.youtube.com/watch?v=vCEDptvB5Q4)" %}
 - The Age of Insight (Eric R. Kandel){% sidenote "Recommended by [Wei Ouyang](https://aicell.io/authors/wei/)" %}
 
+## Reading List Links {#reading-list-links}
+
+- [Harvard Science Book Talks](https://science.fas.harvard.edu/book-talks)
+- [Patrick Collison's Bookshelf](https://patrickcollison.com/bookshelf)
 </section>
