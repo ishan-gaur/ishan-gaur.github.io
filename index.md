@@ -25,7 +25,7 @@ I spent part of my gap year at [Aviv Regev](https://www.gene.com/scientists/our-
 <section>
 
 ## What's New?
-
+- [4/9] Re-released DFM as [Prot★](https://ishan-gaur.github.io/proteingen/) ("ProtStar"): it's been expanded with several new protein design libraries, utilities for folding proteins and create MSA datasets, and extensive tooling to help you leverage agents to produce library design pipelines.
 - [2/23] Released [DFM](https://github.com/ishan-gaur/dfm): a small library providing a uniform interface for MLMs, DDMs, DFMs, AO-ARMs, and even AR models. It facilitates plug-and-play experimentation with new sampling, conditioning, and finetuning methods.
 - [2/23] Bear Xiong and I give a talk on [ProteinGuide](https://arxiv.org/abs/2505.04823b) at [Profluent](https://www.profluent.bio/)
 
