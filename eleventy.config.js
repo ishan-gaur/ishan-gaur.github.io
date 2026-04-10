@@ -25,6 +25,16 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("misc");
   eleventyConfig.addPassthroughCopy("assets");
+
+  // Define a paired shortcode called 'colorBold'
+  eleventyConfig.addPairedShortcode("colorBold", function(content, color) {
+    return `<span style="color:${color}; font-weight:bold">${content}</span>`;
+  });
+
+  eleventyConfig.addPairedShortcode("color", function(content, color) {
+    return `<span style="color:${color}">${content}</span>`;
+  });
+
 }
 
 let options = { html: true };

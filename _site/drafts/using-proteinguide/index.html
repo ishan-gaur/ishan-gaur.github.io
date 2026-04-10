@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UserGuide for ProteinGuide</title>
+    <link rel="stylesheet" href="/css/base.css">
+</head>
+<body>
+    <nav class="site-nav">
+        <a href="/">Home</a>
+        <a href="/bookshelf/">Bookshelf</a>
+        <a href="/writing/">Writing</a>
+    </nav>
+    <main>
+        <article>
+<h1>UserGuide for ProteinGuide</h1>
+
+<section>
+<p>Earlier this year, we released a <a href="https://arxiv.org/abs/2505.04823">pre-print</a> entitled ProteinGuide. It describes a general method for blending wet-lab data and pretrained generative models for library design. Pretrained generative models such as ESM3, ProteinMPNN, and DPLM, are trained to fill in partial protein sequences, enabling them even generate full sequences from scratch. However, as protein designers, we have no natural way to communicate our design goals, such as optimizing stability or binding affinity, to these tools. ProteinGuide provides a way to extract <span style="color:blue">sequences from the generative model</span> that are <span style="color:darkorange">predicted to satisfy the functional properties we care about</span>. To do this, ProteinGuide uses a lightweight property prediction model, trained on your wet-lab data, to iteratively &quot;guide&quot; the generative model towards sequences with higher fitness.</p>
+<p>Although ProteinGuide is theoretically sound, its performance can vary according to the validity of the following assumptions:</p>
+<ol>
+<li>that the <span style="color:blue">generative model</span> produces relevant, but perhaps suboptimal sequences for my task, and</li>
+<li>that the <span style="color:darkorange">predictive model</span> sufficiently captures my remaining preferences about the protein I want to create.x</li>
+</ol>
+<p>These two conditions can be restated as:</p>
+<ol>
+<li>the generative model captures my <span style="color:blue">prior beliefs</span> about which sequences make sense for this task</li>
+<li>the predictive model can accurately determine, based on your <span style="color:darkorange">wet-lab data</span>, which of these sequences are most desireable.</li>
+</ol>
+<p>In this guide<label for="sn-690" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-690" class="margin-toggle"><span class="sidenote">Note that this post does not include a mathematical treatment of ProteinGuide. For more background please check out the <a href="https://arxiv.org/abs/2505.04823">pre-print</a>, our lab's <a href="https://proceedings.iclr.cc/paper_files/paper/2025/hash/597254dc45be8c166d3ccf0ba2d56325-Abstract-Conference.html">prior work</a> on discrete classifier guidance, and my post on discrete generative models.</span>, we first review the basic procedure for using ProteinGuide, assuming these two conditions hold. Then we examine common ways in which these assumptions break down, and how this can be addressed. Finally, we walk through a practical workflow for ProteinGuide and link to an FAQ page with edge cases that you can explore as needed. In order to make it easier to use, we've added this ProteinGuide workflow to the ProteinGen package as well.</p>
+<!-- TODO link the FAQs -->
+<!-- TODO write the post on unifying discrete generative models -->
+</section>
+<section>
+<h2>Table of Contents</h2>
+<nav>
+  <ol>
+    <li><a href="#intro-to-rbms">Intro to RBMs and learning by MCMC</a></li>
+    <li><a href="#finite-depth">Finite depth networks representing infinite depth stacks</a></li>
+    <li><a href="#being-proper">Being proper and rigorous is overrated?</a></li>
+  </ol>
+</nav>
+</section>
+<section>
+<p>The job of the noisy predictor is to efficiently answer the question: &quot;Suppose we inserted amino acid AA here and then the generative model went about its business filling in the rest of the sequence like normal. What would be the probability that the fitness of that sequence would exceed my target threshold, that $f(x) = y &gt; y*$.</p>
+<p>Notice earlier that I said <em>efficiently</em> answer the question. If you re-read the previous statement, it's clear that this could be answered by sufficient simulation. We could simply fix the AA at the current position and then have the generative model complete the sequence many times over. However, the empirical observation is that</p>
+<p>Every time you run a pretrained generative model, like ESM3, ProteinMPNN, or DPLM, the model will output a plausible sequence at random. We can think of this sequence as a random variable $x$ and imagine that if we kept sampling sequences from the model <em>ad-infinitum</em>, we should right down the frequency of each possible sequence, giving us a mapping from sequences to the probability of observing that sequence, a function we denote $p(x)$.</p>
+<p><label for="sn-691" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-691" class="margin-toggle"><span class="sidenote">See these footnotes for some recent papers<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup><sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup> I think are asking interesting questions.</span></p>
+</section>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>How should we bring the computational or algorithmic properties of the observer into our understanding of the information that can be learned from a dataset (Epiplexity paper)? <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>Should the unit of analysis in engineering stable, fast training be the &quot;module&quot; level and not end-to-end dynamics of a network (Muon)? <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>How should we compare learning objectives when we know we won't minimize the loss? Is the traditional analysis of the minimizers being desirable enough? <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+</article>
+    </main>
+</body>
+</html>
