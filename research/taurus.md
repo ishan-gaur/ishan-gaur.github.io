@@ -15,6 +15,7 @@ links: [
     text: "Code"
   }
 ]
+image: research/taurus.png
 tags: paper
 ---
 Emerging applications---cloud computing, the internet of things, and augmented/virtual reality---demand responsive, secure, and scalable datacenter networks. These networks currently implement simple, per-packet, data-plane heuristics (e.g., ECMP and sketches) under a slow, millisecond-latency control plane that runs data-driven performance and security policies. However, to meet applications' service-level objectives (SLOs) in a modern data center, networks must bridge the gap between line-rate, per-packet execution and complex decision making.
