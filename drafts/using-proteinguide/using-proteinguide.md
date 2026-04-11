@@ -1,11 +1,11 @@
 ---
-title: UserGuide for ProteinGuide
+title: An Informal UserGuide for ProteinGuide
 layout: blog.liquid
 ---
 
 <section>
 
-Earlier this year, we released a [pre-print](https://arxiv.org/abs/2505.04823) entitled ProteinGuide. It describes a general method for blending wet-lab data and pretrained generative models for library design. Pretrained generative models such as ESM3, ProteinMPNN, and DPLM, are trained to fill in partial protein sequences, enabling them even generate full sequences from scratch. However, as protein designers, we have no natural way to communicate our design goals, such as optimizing stability or binding affinity, to these tools. 
+Earlier this year, we released a [pre-print](https://arxiv.org/abs/2505.04823) entitled ProteinGuide. It describes a general method for blending wet-lab data and pretrained generative models for library design. Pretrained generative models such as ESM3, ProteinMPNN, and DPLM, are trained to fill in partial protein sequences, enabling them to even generate full sequences from scratch. However, as protein designers, these tools offer no way to input our design goals, such as optimizing stability or binding affinity.
 
 ProteinGuide provides a way to extract {% color "blue" %}sequences from a pretrained generative model{% sidenote "<img src='generative_model.png' alt='Generative model diagram' style='max-width:100%;height:auto' />" %}{% endcolor %}—like ProteinMPNN, ESM, or ProGen—that are {% color "darkorange" %}predicted to satisfy the functional properties{% endcolor %} we care about. To do this, ProteinGuide uses a lightweight property prediction model, trained on your wet-lab data, to iteratively "guide" the generative model towards sequences with higher fitness.
 
@@ -30,9 +30,9 @@ In this guide{% sidenote "Note that this post does not include a mathematical tr
 
 <nav>
   <ol>
-    <li><a href="#intro-to-rbms">Intro to RBMs and learning by MCMC</a></li>
-    <li><a href="#finite-depth">Finite depth networks representing infinite depth stacks</a></li>
-    <li><a href="#being-proper">Being proper and rigorous is overrated?</a></li>
+    <li><a href="#intro">Introduction to ProteinGuide</a></li>
+    <li><a href="#reality">Time for a Reality Check</a></li>
+    <li><a href="#workflow">A Practical Workflow</a></li>
   </ol>
 </nav>
 
@@ -40,18 +40,40 @@ In this guide{% sidenote "Note that this post does not include a mathematical tr
 
 <section>
 
-The job of the noisy predictor is to efficiently answer the question: "Suppose we inserted amino acid AA here and then the generative model went about its business filling in the rest of the sequence like normal. What would be the probability that the fitness of that sequence would exceed my target threshold, that $f(x) = y > y*$.
+## Introduction to ProteinGuide {#intro}
 
-Notice earlier that I said *efficiently* answer the question. If you re-read the previous statement, it's clear that this could be answered by sufficient simulation. We could simply fix the AA at the current position and then have the generative model complete the sequence many times over. However, the empirical observation is that 
+This section will provide an intuitive introduction to protein sequence generative models and ProteinGuide. For readers with a statistics or machine learning background, we provide more rigorous definitions and equations in the sidenotes.
+
+**denoising image**
+
+Generative models design sequences by iteratively inserting amino acids into masked positions in the original sequence.
+
+**face and tree ahead; top-down view of the tree with proteins at the end, labeled by prior and fitness, **
+
+We can visualize this process as the model navigating a tree of decisions until it reaches a complete sequence at the end. We can even label the tree based on which endpoints are realistic proteins. We can also label the endpoints which have high fitness for our task, such as binding a target receptor.
+
+In proteinguide, the goal is to tweak the model's amino acid choices at each step so that it only produces sequences that are reasonable proteins with high fitness (boxed). What's the natural way to do this? Well, imagine there was only one amio acid left.
+
+**Depth one tree with labels**
+
+All we have to do is allow the model to make the mutations that work, and stop it from making the mutations that are bad. What if we're two steps away? We might count the proportion of the model-generated sequences from each node that end up having high fitness. It turns out that multiplying these probabilities by the model's original probabilities gives you a new distribution, called a conditional distribution. It is the distribution of your generative model conditioned on the fact that it needs to generate a high fitness variant. In fact, if you could calculate these probabilities exactly, and at least one high fitness variant exists, this procedure would never fail.
+
+**Depth two tree and multiplying distributions to get the conditional distribution**
+
+However, this procedure clearly isn't realistic. If we are going to test every possible sequence anyway, we wouldn't have needed ML models in the first place. Instead, what we actually do is try to train a model of the true probability of succes from a partially masked sequence from a set of assay-labeled samples from the model. This is called the noisy predictor. The way this works is you generate a bunch of partial masking of the sequences in your dataset and have the model predict the label of the original sequence. 
+
+Now that we have a pre-trained generative model and a noisy predictor, in order to sample a sequence conditioned on the fact that we wanted to have a certain fitness, all we have to do is at each step get the predictions from the noisy predictor for which amino acids are likely to result in a success. Multiply that against the generative model's original belief for which amino acids are appropriate. And then randomly sample an amino acid according to those probabilities.
+
+We can summarize the ProteinGuide algorithm as follows: 
 
 
-Every time you run a pretrained generative model, like ESM3, ProteinMPNN, or DPLM, the model will output a plausible sequence at random. We can think of this sequence as a random variable $x$ and imagine that if we kept sampling sequences from the model *ad-infinitum*, we should right down the frequency of each possible sequence, giving us a mapping from sequences to the probability of observing that sequence, a function we denote $p(x)$. 
 
-{% sidenote "See these footnotes for some recent papers[^1][^2][^3] I think are asking interesting questions." %}
+## Time for a Reality Check {#reality}
+
+
+
+## A Practical Workflow {#workflow}
+
+
+
 </section>
-
-[^1]: How should we bring the computational or algorithmic properties of the observer into our understanding of the information that can be learned from a dataset (Epiplexity paper)?
-
-[^2]: Should the unit of analysis in engineering stable, fast training be the "module" level and not end-to-end dynamics of a network (Muon)?
-
-[^3]: How should we compare learning objectives when we know we won't minimize the loss? Is the traditional analysis of the minimizers being desirable enough?
