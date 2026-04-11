@@ -5,15 +5,17 @@ layout: blog.liquid
 
 <section>
 
-Earlier this year, we released a [pre-print](https://arxiv.org/abs/2505.04823) entitled ProteinGuide. It describes a general method for blending wet-lab data and pretrained generative models for library design. Pretrained generative models such as ESM3, ProteinMPNN, and DPLM, are trained to fill in partial protein sequences, enabling them even generate full sequences from scratch. However, as protein designers, we have no natural way to communicate our design goals, such as optimizing stability or binding affinity, to these tools. ProteinGuide provides a way to extract {% color "blue" %}sequences from the generative model{% endcolor %} that are {% color "darkorange" %}predicted to satisfy the functional properties we care about{% endcolor %}. To do this, ProteinGuide uses a lightweight property prediction model, trained on your wet-lab data, to iteratively "guide" the generative model towards sequences with higher fitness.
+Earlier this year, we released a [pre-print](https://arxiv.org/abs/2505.04823) entitled ProteinGuide. It describes a general method for blending wet-lab data and pretrained generative models for library design. Pretrained generative models such as ESM3, ProteinMPNN, and DPLM, are trained to fill in partial protein sequences, enabling them even generate full sequences from scratch. However, as protein designers, we have no natural way to communicate our design goals, such as optimizing stability or binding affinity, to these tools. 
 
-Although ProteinGuide is theoretically sound, its performance can vary according to the validity of the following assumptions:
-1. that the {% color "blue" %}generative model{% endcolor %} produces relevant, but perhaps suboptimal sequences for my task, and
-2. that the {% color "darkorange" %}predictive model{% endcolor %} sufficiently captures my remaining preferences about the protein I want to create.x    
+ProteinGuide provides a way to extract {% color "blue" %}sequences from a pretrained generative model{% sidenote "<img src='generative_model.png' alt='Generative model diagram' style='max-width:100%;height:auto' />" %}{% endcolor %}—like ProteinMPNN, ESM, or ProGen—that are {% color "darkorange" %}predicted to satisfy the functional properties{% endcolor %} we care about. To do this, ProteinGuide uses a lightweight property prediction model, trained on your wet-lab data, to iteratively "guide" the generative model towards sequences with higher fitness.
 
-These two conditions can be restated as:
-1. the generative model captures my {% color "blue" %}prior beliefs{% endcolor %} about which sequences make sense for this task
-2. the predictive model can accurately determine, based on your {% color "darkorange" %}wet-lab data{% endcolor %}, which of these sequences are most desireable.
+Although ProteinGuide is theoretically sound, its performance can be contingent on whether or not:
+1. the {% color "blue" %}generative model{% endcolor %} produces relevant, even if suboptimal, sequences for my task, and
+2. the {% color "darkorange" %}predictive model{% sidenote "<img src='predictive_model.png' alt='Predictive model diagram' style='max-width:100%;height:auto' />" %}{% endcolor %} sufficiently captures my remaining preferences about which proteins are desireable.
+
+These two assumptions can be restated as:
+1. the generative model must capture your {% color "blue" %}prior beliefs{% endcolor %} about which sequences make sense for this task
+2. the predictive model must accurately determine, based on your {% color "darkorange" %}wet-lab data{% endcolor %}, which sequences from your {% color "blue" %}prior{% endcolor %} are most desireable.
 
 In this guide{% sidenote "Note that this post does not include a mathematical treatment of ProteinGuide. For more background please check out the [pre-print](https://arxiv.org/abs/2505.04823), our lab's [prior work](https://proceedings.iclr.cc/paper_files/paper/2025/hash/597254dc45be8c166d3ccf0ba2d56325-Abstract-Conference.html) on discrete classifier guidance, and my post on discrete generative models." %}, we first review the basic procedure for using ProteinGuide, assuming these two conditions hold. Then we examine common ways in which these assumptions break down, and how this can be addressed. Finally, we walk through a practical workflow for ProteinGuide and link to an FAQ page with edge cases that you can explore as needed. In order to make it easier to use, we've added this ProteinGuide workflow to the ProteinGen package as well.
 

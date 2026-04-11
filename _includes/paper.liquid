@@ -1,6 +1,13 @@
 <section>
     <p>
-    <strong>{{ paper.data.title }}</strong><br>
+    <strong>{{ paper.data.title }}</strong>
+    <label for="sn-{{ paper.data.title | slug }}" class="margin-toggle sidenote-number"></label>
+    <input type="checkbox" id="sn-{{ paper.data.title | slug }}" class="margin-toggle"/>
+    <span class="sidenote">
+        <br>
+        <img src="{{ paper.data.image }}" alt="" style="height:120px;width:auto" />
+    </span>
+    <br>
     <em>{{ paper.data.venue }}, {{ paper.data.pub_date }}{% if paper.data.awards %} ({{ paper.data.awards }}){% endif %}</em><br>
     {{ paper.data.authors }}
     {% if paper.data.links %}<br>
