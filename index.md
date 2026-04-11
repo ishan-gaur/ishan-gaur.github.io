@@ -2,23 +2,19 @@
 title: Ishan Gaur
 layout: base.liquid
 ---
-<img src="/assets/ishan.png" alt="headshot" width="250">
-
-<section>
-
-Hi, I'm Ishan.
-
-[Twitter](https://x.com/Ishan__Gaur)
-[Email](ishang@berkley.edu)
-[Scholar](https://scholar.google.com/citations?user=PgW-8YIAAAAJ&hl=en)
-[Code](https://github.com/ishan-gaur)
+<!-- <img src="/assets/ishan.png" alt="headshot" width="250"> -->
 
 <section>
 
 ## About
-I'm a second-year PhD student at Berkeley AI Research, advised by [Jennifer Listgarten](http://www.jennifer.listgarten.com/). I work on generative models and agents for scientific discovery.<label for="sn-service" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-service" class="margin-toggle"/><span class="sidenote">I am also an <a href="https://peers.eecs.berkeley.edu/">EECS Peer</a> and help run the <a href="https://bair.berkeley.edu/blog/">BAIR Blog</a>.</span>
 
-I spent part of my gap year at [Aviv Regev](https://www.gene.com/scientists/our-scientists/aviv-regev)'s group at Genentech, working on multimodal language models with the wonderful [Yongju Lee](https://x.com/LeeTaliq). Before that, I graduated from Stanford with bachelor and master degrees in computer science and electrical engineering. During my time there, I was fortunate to have worked with [Emma Lundberg](https://lundberglab.stanford.edu/) on vision models for mapping dynamic changes in the human proteome. I also had a blast working on using new hardware accelerators to run machine learning algorithms in computer networks, advised by [Kunle Olukotun](https://engineering.stanford.edu/people/oyekunle-olukotun) and [Muhammad Shahbaz](https://gitlab.com/mshahbaz/mshahbaz.gitlab.io/-/wikis/home).
+Hi, I'm Ishan. {% marginnote "<img src='/assets/ishan.png' alt='' width='325'>" %} I'm a second-year PhD student at Berkeley AI Research, advised by [Jennifer Listgarten](http://www.jennifer.listgarten.com/). I work on generative models and agents for scientific discovery.
+
+<!-- {% sidenote "I am also an <a href='https://peers.eecs.berkeley.edu/'>EECS Peer</a> and help run the <a href='https://bair.berkeley.edu/blog/'>BAIR Blog</a>." %} -->
+
+I spent part of my gap year at [Aviv Regev](https://www.gene.com/scientists/our-scientists/aviv-regev)'s group at Genentech, working on multimodal language models with [Yongju Lee](https://x.com/LeeTaliq). Before that, I was an undergrad at Stanford. During my time there, I studies computer systems, was active in the startup community, and was fortunate to have worked with [Emma Lundberg](https://lundberglab.stanford.edu/) on vision models for mapping dynamic changes in the human proteome. I also had a blast working with new hardware accelerators, with [Kunle Olukotun](https://engineering.stanford.edu/people/oyekunle-olukotun) and [Muhammad Shahbaz](https://gitlab.com/mshahbaz/mshahbaz.gitlab.io/-/wikis/home).
+
+Links:&emsp;<a href='https://x.com/Ishan__Gaur'>Twitter</a>&emsp;<a href='ishang@berkley.edu'>Email</a>&emsp;<a href='https://scholar.google.com/citations?user=PgW-8YIAAAAJ&hl=en'>Scholar</a>&emsp;<a href='https://github.com/ishan-gaur'>GitHub</a>
 
 </section>
 
