@@ -8,7 +8,7 @@ layout: base.liquid
 
 ## About
 
-Hi, I'm Ishan. {% marginnote "<img src='/assets/ishan.png' alt='' width='325'>" %} I'm a second-year PhD student at Berkeley AI Research, advised by [Jennifer Listgarten](http://www.jennifer.listgarten.com/). I work on generative models and agents for scientific discovery.
+Hi, I'm Ishan. {% marginnote "<img src='/assets/ishan.png' alt='' class='headshot'>" %} I'm a second-year PhD student at Berkeley AI Research, advised by [Jennifer Listgarten](http://www.jennifer.listgarten.com/). I work on generative models and agents for scientific discovery.
 
 <!-- {% sidenote "I am also an <a href='https://peers.eecs.berkeley.edu/'>EECS Peer</a> and help run the <a href='https://bair.berkeley.edu/blog/'>BAIR Blog</a>." %} -->
 

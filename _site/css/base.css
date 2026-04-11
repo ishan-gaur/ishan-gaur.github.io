@@ -488,6 +488,12 @@ label.margin-toggle:not(.sidenote-number) {
 }
 
 
+/* Headshot */
+img.headshot {
+    width: clamp(120px, 18vw, 300px);
+    height: auto;
+}
+
 /* Site navigation */
 nav.site-nav {
    padding-top: 2rem;
