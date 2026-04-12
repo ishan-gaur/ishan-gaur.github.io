@@ -32,6 +32,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("misc");
   eleventyConfig.addPassthroughCopy("assets");
+  eleventyConfig.addPassthroughCopy("drafts/using-proteinguide/esm-sampling-crop.mp4");
 
   // Define a paired shortcode called 'colorBold'
   eleventyConfig.addPairedShortcode("colorBold", function(content, color) {
