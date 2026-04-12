@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ishan Gaur</title>
     <link rel="stylesheet" href="/css/base.css">
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [["$", "$"] , ["\\(", "\\)"]],
+                displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+            },
+        };
+    </script>
+    <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <nav class="site-nav">
@@ -16,15 +25,16 @@
         <article><!-- <img src="/assets/ishan.png" alt="headshot" width="250"> -->
 <section>
 <h2>About</h2>
-<p>Hi, I'm Ishan. <label for="mn-1" class="margin-toggle"></label><input type="checkbox" id="mn-1" class="margin-toggle"><span class="marginnote"><picture><source type="image/webp" srcset="/img/09df9QY6CX-1368.webp 1368w"><img src="/img/09df9QY6CX-1368.jpeg" alt="" class="headshot" width="1368" height="1368"></picture></span> I'm a second-year PhD student at Berkeley AI Research, advised by <a href="http://www.jennifer.listgarten.com/">Jennifer Listgarten</a>. I work on generative models and agents for scientific discovery.</p>
-<!-- <label for="sn-16" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-16" class="margin-toggle"/><span class="sidenote">I am also an <a href='https://peers.eecs.berkeley.edu/'>EECS Peer</a> and help run the <a href='https://bair.berkeley.edu/blog/'>BAIR Blog</a>.</span> -->
+<p>Hi, I'm Ishan. <label for="mn-384" class="margin-toggle"></label><input type="checkbox" id="mn-384" class="margin-toggle"><span class="marginnote"><picture><source type="image/webp" srcset="/.11ty/image/?src=assets%2Fishan.png&width=1368&format=webp&via=transform 1368w"><img src="/.11ty/image/?src=assets%2Fishan.png&width=1368&format=jpeg&via=transform" alt="" width="1368" height="1368"></picture></span> I'm a second-year PhD student at Berkeley AI Research, advised by <a href="http://www.jennifer.listgarten.com/">Jennifer Listgarten</a>. I work on generative models and agents for scientific discovery.</p>
+<!-- <label for="sn-5372" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5372" class="margin-toggle"/><span class="sidenote">I am also an <a href='https://peers.eecs.berkeley.edu/'>EECS Peer</a> and help run the <a href='https://bair.berkeley.edu/blog/'>BAIR Blog</a>.</span> -->
 <p>I spent part of my gap year at <a href="https://www.gene.com/scientists/our-scientists/aviv-regev">Aviv Regev</a>'s group at Genentech, working on multimodal language models with <a href="https://x.com/LeeTaliq">Yongju Lee</a>. Before that, I was an undergrad at Stanford. During my time there, I studies computer systems, was active in the startup community, and was fortunate to have worked with <a href="https://lundberglab.stanford.edu/">Emma Lundberg</a> on vision models for mapping dynamic changes in the human proteome. I also had a blast working with new hardware accelerators, with <a href="https://engineering.stanford.edu/people/oyekunle-olukotun">Kunle Olukotun</a> and <a href="https://gitlab.com/mshahbaz/mshahbaz.gitlab.io/-/wikis/home">Muhammad Shahbaz</a>.</p>
 <p>Links: <a href="https://x.com/Ishan__Gaur">Twitter</a> <a href="ishang@berkley.edu">Email</a> <a href="https://scholar.google.com/citations?user=PgW-8YIAAAAJ&hl=en">Scholar</a> <a href="https://github.com/ishan-gaur">GitHub</a></p>
 </section>
 <section>
 <h2>What's New?</h2>
 <ul>
-<li>[4/9] Re-released DFM as <a href="https://ishan-gaur.github.io/proteingen/">Prot★</a> (&quot;ProtStar&quot;): it's been expanded with several new protein design libraries, utilities for folding proteins and create MSA datasets, and extensive tooling to help you leverage agents to produce library design pipelines.</li>
+<li>[4/11] Put out a little <a href="https://github.com/ishan-gaur/af3-server">AF3 Fast API server</a>. It's intended to be used on SLURM machines and shared across users in a lab. That way one machine running one instance of AF3 can be used by everyone.</li>
+<li>[4/9] Re-released DFM as <a href="https://ishan-gaur.github.io/proteingen/">Prot★</a> (&quot;ProtStar&quot;): it's been expanded with several new protein design workflows, utilities for folding proteins and creating MSA datasets, and extensive tooling to help you leverage agents for writing library design pipelines.</li>
 <li>[2/23] Released <a href="https://github.com/ishan-gaur/dfm">DFM</a>: a small library providing a uniform interface for MLMs, DDMs, DFMs, AO-ARMs, and even AR models. It facilitates plug-and-play experimentation with new sampling, conditioning, and finetuning methods.</li>
 <li>[2/23] Bear Xiong and I give a talk on <a href="https://arxiv.org/abs/2505.04823b">ProteinGuide</a> at <a href="https://www.profluent.bio/">Profluent</a></li>
 </ul>
@@ -39,7 +49,7 @@
     <input type="checkbox" id="sn-guide-your-favorite-protein-sequence-generative-model" class="margin-toggle">
     <span class="sidenote">
         <br>
-        <picture><source type="image/webp" srcset="/q6m0ffxc3A-573.webp 573w"><img src="/q6m0ffxc3A-573.jpeg" alt="" style="height:120px;width:auto" width="573" height="228"></picture>
+        <picture><source type="image/webp" srcset="/.11ty/image/?src=research%2Fproteinguide.png&width=573&format=webp&via=transform 573w"><img src="/.11ty/image/?src=research%2Fproteinguide.png&width=573&format=jpeg&via=transform" alt="" style="height:120px;width:auto" width="573" height="228"></picture>
     </span>
     <br>
     <em>arXiv preprint arXiv:2505.04823, May 7, 2025</em><br>
@@ -54,7 +64,7 @@
     <input type="checkbox" id="sn-multimodal-cell-maps-as-a-foundation-for-structural-and-functional-genomics" class="margin-toggle">
     <span class="sidenote">
         <br>
-        <picture><source type="image/webp" srcset="/Btx6XHMJhY-2476.webp 2476w"><img src="/Btx6XHMJhY-2476.jpeg" alt="" style="height:120px;width:auto" width="2476" height="1220"></picture>
+        <picture><source type="image/webp" srcset="/.11ty/image/?src=research%2Fmusic2.png&width=2476&format=webp&via=transform 2476w"><img src="/.11ty/image/?src=research%2Fmusic2.png&width=2476&format=jpeg&via=transform" alt="" style="height:120px;width:auto" width="2476" height="1220"></picture>
     </span>
     <br>
     <em>Nature, April 9, 2025</em><br>
@@ -69,7 +79,7 @@
     <input type="checkbox" id="sn-colorswap:-a-color-and-word-order-dataset-for-multimodal-evaluation" class="margin-toggle">
     <span class="sidenote">
         <br>
-        <picture><source type="image/webp" srcset="/KxIEQzl-WV-1416.webp 1416w"><img src="/KxIEQzl-WV-1416.jpeg" alt="" style="height:120px;width:auto" width="1416" height="716"></picture>
+        <picture><source type="image/webp" srcset="/.11ty/image/?src=research%2Fcolorswap.png&width=1416&format=webp&via=transform 1416w"><img src="/.11ty/image/?src=research%2Fcolorswap.png&width=1416&format=jpeg&via=transform" alt="" style="height:120px;width:auto" width="1416" height="716"></picture>
     </span>
     <br>
     <em>ACL, Aug 6, 2024</em><br>
@@ -84,7 +94,7 @@
     <input type="checkbox" id="sn-mapping-the-multiscale-proteomic-organization-of-cellular-and-disease-phenotypes" class="margin-toggle">
     <span class="sidenote">
         <br>
-        <picture><source type="image/webp" srcset="/k62OYI9sSp-1436.webp 1436w"><img src="/k62OYI9sSp-1436.jpeg" alt="" style="height:120px;width:auto" width="1436" height="1276"></picture>
+        <picture><source type="image/webp" srcset="/.11ty/image/?src=research%2Fmultiscale.png&width=1436&format=webp&via=transform 1436w"><img src="/.11ty/image/?src=research%2Fmultiscale.png&width=1436&format=jpeg&via=transform" alt="" style="height:120px;width:auto" width="1436" height="1276"></picture>
     </span>
     <br>
     <em>Annual Review of Biomedical Data Science, May 15, 2024</em><br>
@@ -99,7 +109,7 @@
     <input type="checkbox" id="sn-a-cell-cycle-resolved-multi-scale-map-of-the-cell" class="margin-toggle">
     <span class="sidenote">
         <br>
-        <picture><source type="image/webp" srcset="/PG2g-qyohf-1680.webp 1680w"><img src="/PG2g-qyohf-1680.jpeg" alt="" style="height:120px;width:auto" width="1680" height="1436"></picture>
+        <picture><source type="image/webp" srcset="/.11ty/image/?src=research%2Fmusic3.png&width=1680&format=webp&via=transform 1680w"><img src="/.11ty/image/?src=research%2Fmusic3.png&width=1680&format=jpeg&via=transform" alt="" style="height:120px;width:auto" width="1680" height="1436"></picture>
     </span>
     <br>
     <em>Poster at Pacific Symposium on Biocomputing, January 3, 2024</em><br>
@@ -114,7 +124,7 @@
     <input type="checkbox" id="sn-taurus:-a-data-plane-architecture-for-per-packet-ml" class="margin-toggle">
     <span class="sidenote">
         <br>
-        <picture><source type="image/webp" srcset="/P4ZqD-d5nk-1332.webp 1332w"><img src="/P4ZqD-d5nk-1332.jpeg" alt="" style="height:120px;width:auto" width="1332" height="542"></picture>
+        <picture><source type="image/webp" srcset="/.11ty/image/?src=research%2Ftaurus.png&width=1332&format=webp&via=transform 1332w"><img src="/.11ty/image/?src=research%2Ftaurus.png&width=1332&format=jpeg&via=transform" alt="" style="height:120px;width:auto" width="1332" height="542"></picture>
     </span>
     <br>
     <em>ASPLOS, Feb 28, 2022 (IETF Applied Networking Research Prize)</em><br>

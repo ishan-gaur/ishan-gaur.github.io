@@ -8,7 +8,7 @@ layout: base.liquid
 
 ## About
 
-Hi, I'm Ishan. {% marginnote "<img src='/assets/ishan.png' alt='' class='headshot'>" %} I'm a second-year PhD student at Berkeley AI Research, advised by [Jennifer Listgarten](http://www.jennifer.listgarten.com/). I work on generative models and agents for scientific discovery.
+Hi, I'm Ishan. {% marginnote "<img src='/assets/ishan.png' alt=''>" %} I'm a second-year PhD student at Berkeley AI Research, advised by [Jennifer Listgarten](http://www.jennifer.listgarten.com/). I work on generative models and agents for scientific discovery.
 
 <!-- {% sidenote "I am also an <a href='https://peers.eecs.berkeley.edu/'>EECS Peer</a> and help run the <a href='https://bair.berkeley.edu/blog/'>BAIR Blog</a>." %} -->
 
@@ -21,7 +21,8 @@ Links:&emsp;<a href='https://x.com/Ishan__Gaur'>Twitter</a>&emsp;<a href='ishang
 <section>
 
 ## What's New?
-- [4/9] Re-released DFM as [Prot★](https://ishan-gaur.github.io/proteingen/) ("ProtStar"): it's been expanded with several new protein design libraries, utilities for folding proteins and create MSA datasets, and extensive tooling to help you leverage agents to produce library design pipelines.
+- [4/11] Put out a little [AF3 Fast API server](https://github.com/ishan-gaur/af3-server). It's intended to be used on SLURM machines and shared across users in a lab. That way one machine running one instance of AF3 can be used by everyone.
+- [4/9] Re-released DFM as [Prot★](https://ishan-gaur.github.io/proteingen/) ("ProtStar"): it's been expanded with several new protein design workflows, utilities for folding proteins and creating MSA datasets, and extensive tooling to help you leverage agents for writing library design pipelines.
 - [2/23] Released [DFM](https://github.com/ishan-gaur/dfm): a small library providing a uniform interface for MLMs, DDMs, DFMs, AO-ARMs, and even AR models. It facilitates plug-and-play experimentation with new sampling, conditioning, and finetuning methods.
 - [2/23] Bear Xiong and I give a talk on [ProteinGuide](https://arxiv.org/abs/2505.04823b) at [Profluent](https://www.profluent.bio/)
 
