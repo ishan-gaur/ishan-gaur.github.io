@@ -38,8 +38,9 @@ In this guide{% sidenote "Note that this post does not include a mathematical tr
 
 </section>
 
-<section>
+{% include "using-proteinguide/_theory.md" %}
 
+<<<<<<< Updated upstream
 ## Introduction to ProteinGuide {#intro}
 
 This section will provide an intuitive introduction to protein sequence generative models and ProteinGuide. For readers with a statistics or machine learning background, we provide more rigorous definitions and equations in the sidenotes.
@@ -77,3 +78,8 @@ We can summarize the ProteinGuide algorithm as follows:
 
 
 </section>
+=======
+{% include "using-proteinguide/_reality-check.md" %}
+
+{% include "using-proteinguide/_practical-workflow.md" %}
+>>>>>>> Stashed changes

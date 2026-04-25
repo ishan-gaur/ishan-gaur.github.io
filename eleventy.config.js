@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 import markdownIt from "markdown-it";
 import mdfigcaption from "markdown-it-image-figures";
@@ -9,6 +10,11 @@ export default function (eleventyConfig) {
 
   // Plugins
   eleventyConfig.addPlugin(eleventyImageTransformPlugin);
+
+  // Allow {% include %} to resolve files relative to each page's directory
+  eleventyConfig.setLiquidOptions({
+    root: ["./_includes", "./drafts"]
+  });
 
   // Markdown library
   const mdLib = markdownIt(options).use(mdfigcaption, figoptions).use(mdFootnote).use(mdAttrs);
