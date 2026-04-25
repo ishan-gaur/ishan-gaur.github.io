@@ -24,6 +24,23 @@ Related to this, it needs to be able to make that prediction for sequences that 
 
 Now, ensuring these two conditions is not actually trivial and, in practice, requires a couple of tricks that we want to share with you through this post. We'll start with an overview of the actual ProteinGuide algorithm, and then we'll talk about tricks for setting up ProteinGuide that we've found to be helpful in making it work for designing real sequences in the lab.
 
+
+Over the last few years, various research groups have poured huge amounts of money into pretrainingi protein generative models. 
+The hope is, eventurally, that these models will give us proteins that reliably fold well, express, and mimic the natural distribution of folds and functions among the organisms we'e studied--essentually a compact representation of all the sequence/structure data we have.
+These models are now getting good enough to create proteins that express well, fold stably, and even have functions that are comm
+
+But when we're designing a protein for a real-world problem, we don't want any random protein, even if it is realistic and performs some random function well. We want a protein that solves our problem. We can imagine that if we enumerated every single sequence that our model might produce, what we want is just the subset that adequately solve our task of intrest.
+
+ProteinGuide is a way to approximately achieve that idealized operation using some tools from machine learning and statistics. The idea is that we'll first cook up a model that can rate any sequence and give us a probability that iwill succed in solving our task of interest, such as catalyzing a reaction with a certain efficiencu under laboratory conditions. However, instead of waiting until the model has already generated a sequence in order to reject the undesirable sequences, we will actually guide the model at every step of generation to discard the moves we think are unlikely to work--or at least modify the probabliity that we make those modes according to their likelihood of success.  This operation, blending the predictive model of function with a pretrained generative model ends up stemming from one of the modst basic laws of probability theory, Bayes' rule.
+
+In this sense, ProteinGuide, always does what it's supposed to. It always gives us the sequence from our generative model that are likely to satisfy our predictor. However, the quality of those samples in terms of actually solving our task of interest depend on the quality of the pretrained generative model and the predictive model.  In this post, we will walk you through a high livel framework for the kinds of ways in which the predictive model or generative model break down and then give you a practical workflow that's a good starting place for using ProteinGuide in your work.
+
+
+
+what if I assume that the reader has all the basic knowledge and just go from there.
+
+
+
 1. Ensure your generative model is producing relevant sequences for your task.
 2. Train a predictive model that captures the sequence-function relationship in your wet-lab data.
 3. Dry run ProteinGuide with the predictive model to get a baseline for the performance you should expect with a noisy predictor.
