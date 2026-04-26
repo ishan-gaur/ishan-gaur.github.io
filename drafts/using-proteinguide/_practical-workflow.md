@@ -3,6 +3,26 @@
 
 ## ProteinGuide in Practice {#workflow}
 
+This post assumes some basic familiarity with generative models, training regression/classification models, and Bayes' rule. I will be posting several pieces, ranging from primers to reviews in an attempt to synthesize what I've learned from using these methods over the last two years and my work the last few months to read through the key works in the field. I'll be drawing not only from work in machine learning (Diffusion, GANs, VAEs, Deep Belief Networks, etc.) but also the development of Monte Carlo methods during WWII, Shannon's information theory, Markov's investigations of poetry, and Laplace's interest in applying the theory of games of chance to astronomy. If you're interested, feel free to subscribe to my substack. I will be cross posting everything there as well.
+
+What follows is a living document recording the Listgarten lab's current best practices for using ProteinGuide. The post is divided into three sections. The first section describes a conceptual framework for how ProteinGuide works in the ideal case, which will help us categorize the main challenges faced when applying the technique in the real world. The second section examines each of these possible failure modes in detail and describes strategies you might consider when faced with these issues in your own work. The final section organizes these ideas into the default workflow we start with for using ProteinGuide with collaborators.
+
+GRAPHIC DESCRIPTION: A large array of boxes connected by lines in a grid. Each one represents a sequence and the other sequences that are one mutation away from it. Each box is split in two diagonally. Most have a light gray x in both boxes. Some have an orange checkmark symbolizing that these are realistic proteins. Some have a blue checkmark symbolizing that these are proteins that solve the task of interest. A medium sized region, containing all of the blue checkmarks and some neighboring orange checkmarks is outlined in red. This is the region of sequences that we think is reasonable to sample from, and which our experimental data is collected from.
+
+- ideal computation; how proteinguide approximates it
+  - you can see that the generative model and the predictive model share the burden of finding successful sequences. if the generative model is poor, the predictive model needs to be able to predict stability and expression to correctly predict function. if the predictive model is weak just identifying a few motifs or mutational patterns that work on sequences close to the wildtype, but the generative model is already likely to produce reasonable sequences, you may still get reasonable results.
+  - important things are to explain:
+    - that the predictive model is what defines the conditional distribution
+    - so anything you want in your protein that isn't captured by the generative model needs to be captured by the predictive model
+      - because the predictive model is normally trained on limited experimental data, it's normally easier to improve your generative model or constrain the design task to something that your generative model can handle reasonably well.
+    - that because we are guiding intermediate generation steps, the generative model must forecast how the generative model will complete a partial sequence--the closer the predictive model's training data is to the generative model, the better
+      - this is most easy to solve at the very beginning with designing the initial library
+      - barring that, if you like that initial library, you can make your generative model approximate it, at the danger of losing some of its in-built knowledge of the natural distribution of sequences
+      - finally you can try to distill the clean model's predictions on the generative model's distribution
+      - because it would be difficult to train a predictive model on limited data that capture all your design desiderate, you have to make sure that the base generative model is setup to produce sequences that are as relevant to your task as possible
+    - that the predictive model needs to be calibrated to the generative model's distribution (at least roughly) in order to make good decisions for partially masked sequences
+    - that ideally your generative model and predictive model are amplifying each other's strengths. if your generative model is not concentrated enough of the relevant sequences, the predictive model might end up having to 
+
 ProteinGuide is a method for *classifier guidance* of discrete generative models.
 
 First thing I want to make clear is the ideal sampling algorithm that ProteinGuide is approximating. This should make clear what the method aims to achieve and what its natural limitations are. I hope it also helps to motivate the practical tricks we will discuss in this post, as they are designed to reduce the gap between the ideal sampling algorithm and what actually happens when we run ProteinGuide under realistic conditions.
