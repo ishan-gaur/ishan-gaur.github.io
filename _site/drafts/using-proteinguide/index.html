@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>An Informal UserGuide for ProteinGuide</title>
+    <title>Using ProteinGuide</title>
     <link rel="stylesheet" href="/css/base.css">
 </head>
 <body>
@@ -14,51 +14,36 @@
     </nav>
     <main>
         <article>
-<h1>An Informal UserGuide for ProteinGuide</h1>
+<h1>Using ProteinGuide</h1>
 
 <section>
-<p>Earlier this year, we released a <a href="https://arxiv.org/abs/2505.04823">pre-print</a> entitled ProteinGuide. It describes a general method for blending wet-lab data and pretrained generative models for library design. Pretrained generative models such as ESM3, ProteinMPNN, and DPLM, are trained to fill in partial protein sequences, enabling them to even generate full sequences from scratch. However, as protein designers, these tools offer no way to input our design goals, such as optimizing stability or binding affinity.</p>
-<p>ProteinGuide provides a way to extract <span style="color:blue">sequences from a pretrained generative model<label for="sn-178" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-178" class="margin-toggle"><span class="sidenote"><picture><source type="image/webp" srcset="/.11ty/image/?src=drafts%2Fusing-proteinguide%2Fgenerative_model.png&width=1443&format=webp&via=transform 1443w"><img src="/.11ty/image/?src=drafts%2Fusing-proteinguide%2Fgenerative_model.png&width=1443&format=jpeg&via=transform" alt="Generative model diagram" style="max-width:100%;height:auto" width="1443" height="1410"></picture></span></span>—like ProteinMPNN, ESM, or ProGen—that are <span style="color:darkorange">predicted to satisfy the functional properties</span> we care about. To do this, ProteinGuide uses a lightweight property prediction model, trained on your wet-lab data, to iteratively &quot;guide&quot; the generative model towards sequences with higher fitness.</p>
+<p>Earlier this year, we released a <a href="https://arxiv.org/abs/2505.04823">pre-print</a> entitled ProteinGuide. It describes a general method for blending wet-lab data and pretrained generative models for library design.</p>
+<p>This page contains a brief overview of ProteinGuide and an index of resources to help you use it. These links cover everything from getting up to speed on the <a href="./ddm-and-pg-intuition.md">basics of generative modeling</a>, to making <a href="./proteinguide-in-practice.md">ProteinGuide work in practice</a>, and <a href="https://ishan-gaur.github.io/proteingen/workflows/protein-guide/">implementing your first pipeline</a> in Python.</p>
+<p>If you have any questions or comments, we'd love to hear from you! Feel free to email me at <a href="mailto:ishang@berkeley.edu">ishang@berkeley.edu</a>.</p>
+<h2>Resources</h2>
+<nav>
+  <ol>
+    <li><a href="./ddm-and-pg-intuition.md">Intuitive Introduction to ProteinGuide</a></li>
+    <li><a href="https://arxiv.org/abs/2505.04823">ProteinGuide Paper</a></li>
+    <li><a href="./proteinguide-in-practice.md">Using ProteinGuide in Practice</a></li>
+    <li><a href="https://ishan-gaur.github.io/proteingen/workflows/protein-guide/">ProteinGuide Python Workflow on ProtGen</a></li>
+  </ol>
+</nav>
+<h2>Overview</h2>
+<p>Pretrained generative models such as ESM3, ProteinMPNN, and DPLM, are trained to fill in partial protein sequences, enabling them to even generate full sequences from scratch. However, as protein designers, these tools offer no way to input our design goals, such as optimizing stability or binding affinity.</p>
+<p>ProteinGuide provides a way to extract <span style="color:blue">sequences</span> from a <span style="color:blue">pretrained generative model<label for="sn-1243" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1243" class="margin-toggle"><span class="sidenote"><picture><source type="image/webp" srcset="/.11ty/image/?src=drafts%2Fusing-proteinguide%2Fgenerative_model.png&width=1443&format=webp&via=transform 1443w"><img src="/.11ty/image/?src=drafts%2Fusing-proteinguide%2Fgenerative_model.png&width=1443&format=jpeg&via=transform" alt="Generative model diagram" style="max-width:100%;height:auto" width="1443" height="1410"></picture></span></span>—like ProteinMPNN, ESM, or ProGen—that are predicted to satisfy the <span style="color:darkorange">functional properties</span> we care about. To do this, ProteinGuide uses a lightweight <span style="color:darkorange">property predictive model<label for="sn-1244" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1244" class="margin-toggle"><span class="sidenote"><picture><source type="image/webp" srcset="/.11ty/image/?src=drafts%2Fusing-proteinguide%2Fpredictive_model.png&width=1620&format=webp&via=transform 1620w"><img src="/.11ty/image/?src=drafts%2Fusing-proteinguide%2Fpredictive_model.png&width=1620&format=jpeg&via=transform" alt="Predictive model diagram" style="max-width:100%;height:auto" width="1620" height="1462"></picture></span></span>, trained on your wet-lab data, to iteratively &quot;guide&quot; the generative model towards sequences with higher fitness.</p>
 <p>Although ProteinGuide is theoretically sound, its performance can be contingent on whether or not:</p>
 <ol>
-<li>the <span style="color:blue">generative model</span> produces relevant, even if suboptimal, sequences for my task, and</li>
-<li>the <span style="color:darkorange">predictive model<label for="sn-179" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-179" class="margin-toggle"><span class="sidenote"><picture><source type="image/webp" srcset="/.11ty/image/?src=drafts%2Fusing-proteinguide%2Fpredictive_model.png&width=1620&format=webp&via=transform 1620w"><img src="/.11ty/image/?src=drafts%2Fusing-proteinguide%2Fpredictive_model.png&width=1620&format=jpeg&via=transform" alt="Predictive model diagram" style="max-width:100%;height:auto" width="1620" height="1462"></picture></span></span> sufficiently captures my remaining preferences about which proteins are desireable.</li>
+<li>the <span style="color:blue">generative model</span> produces relevant, even if suboptimal, sequences for your task, and</li>
+<li>the <span style="color:darkorange">predictive model</span> sufficiently captures the remaining factors that determine your protein's fitness.</li>
 </ol>
 <p>These two assumptions can be restated as:</p>
 <ol>
 <li>the generative model must capture your <span style="color:blue">prior beliefs</span> about which sequences make sense for this task</li>
 <li>the predictive model must accurately determine, based on your <span style="color:darkorange">wet-lab data</span>, which sequences from your <span style="color:blue">prior</span> are most desireable.</li>
 </ol>
-<p>In this guide<label for="sn-180" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-180" class="margin-toggle"><span class="sidenote">Note that this post does not include a mathematical treatment of ProteinGuide. For more background please check out the <a href="https://arxiv.org/abs/2505.04823">pre-print</a>, our lab's <a href="https://proceedings.iclr.cc/paper_files/paper/2025/hash/597254dc45be8c166d3ccf0ba2d56325-Abstract-Conference.html">prior work</a> on discrete classifier guidance, and my post on discrete generative models.</span>, we first review the basic procedure for using ProteinGuide, assuming these two conditions hold. Then we examine common ways in which these assumptions break down, and how this can be addressed. Finally, we walk through a practical workflow for ProteinGuide and link to an FAQ page with edge cases that you can explore as needed. In order to make it easier to use, we've added this ProteinGuide workflow to the ProteinGen package as well.</p>
 <!-- TODO link the FAQs -->
 <!-- TODO write the post on unifying discrete generative models -->
-</section>
-<section>
-<h2>Table of Contents</h2>
-<nav>
-  <ol>
-    <li><a href="#intro">Introduction to ProteinGuide</a></li>
-    <li><a href="#reality">Time for a Reality Check</a></li>
-    <li><a href="#workflow">A Practical Workflow</a></li>
-  </ol>
-</nav>
-</section>
-<section>
-<h2 id="intro">Introduction to ProteinGuide</h2>
-<p>This section will provide an intuitive introduction to protein sequence generative models and ProteinGuide. For readers with a statistics or machine learning background, we provide more rigorous definitions and equations in the sidenotes.</p>
-<p><strong>denoising image</strong></p>
-<p>Generative models design sequences by iteratively inserting amino acids into masked positions in the original sequence.</p>
-<p>**face and tree ahead; top-down view of the tree with proteins at the end, labeled by prior and fitness, **</p>
-<p>We can visualize this process as the model navigating a tree of decisions until it reaches a complete sequence at the end. We can even label the tree based on which endpoints are realistic proteins. We can also label the endpoints which have high fitness for our task, such as binding a target receptor.</p>
-<p>In proteinguide, the goal is to tweak the model's amino acid choices at each step so that it only produces sequences that are reasonable proteins with high fitness (boxed). What's the natural way to do this? Well, imagine there was only one amio acid left.</p>
-<p><strong>Depth one tree with labels</strong></p>
-<p>All we have to do is allow the model to make the mutations that work, and stop it from making the mutations that are bad. What if we're two steps away? We might count the proportion of the model-generated sequences from each node that end up having high fitness. It turns out that multiplying these probabilities by the model's original probabilities gives you a new distribution, called a conditional distribution. It is the distribution of your generative model conditioned on the fact that it needs to generate a high fitness variant. In fact, if you could calculate these probabilities exactly, and at least one high fitness variant exists, this procedure would never fail.</p>
-<p><strong>Depth two tree and multiplying distributions to get the conditional distribution</strong></p>
-<p>However, this procedure clearly isn't realistic. If we are going to test every possible sequence anyway, we wouldn't have needed ML models in the first place. Instead, what we actually do is try to train a model of the true probability of succes from a partially masked sequence from a set of assay-labeled samples from the model. This is called the noisy predictor. The way this works is you generate a bunch of partial masking of the sequences in your dataset and have the model predict the label of the original sequence.</p>
-<p>Now that we have a pre-trained generative model and a noisy predictor, in order to sample a sequence conditioned on the fact that we wanted to have a certain fitness, all we have to do is at each step get the predictions from the noisy predictor for which amino acids are likely to result in a success. Multiply that against the generative model's original belief for which amino acids are appropriate. And then randomly sample an amino acid according to those probabilities.</p>
-<p>We can summarize the ProteinGuide algorithm as follows:</p>
-<h2 id="reality">Time for a Reality Check</h2>
-<h2 id="workflow">A Practical Workflow</h2>
 </section></article>
     </main>
 </body>

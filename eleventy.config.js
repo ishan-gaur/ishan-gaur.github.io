@@ -1,4 +1,3 @@
-import fs from "node:fs";
 import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 import markdownIt from "markdown-it";
 import mdfigcaption from "markdown-it-image-figures";
@@ -27,10 +26,18 @@ export default function (eleventyConfig) {
     return `<label for="${id}" class="margin-toggle sidenote-number"></label><input type="checkbox" id="${id}" class="margin-toggle"/><span class="sidenote">${content}</span>`;
   });
 
+  // Marginnote shortcode: {% marginnote "content" %}
+  let marginnoteCount = 0;
+  eleventyConfig.addShortcode("marginnote", function(content) {
+    const id = `mn-${++marginnoteCount}`;
+    return `<label for="${id}" class="margin-toggle"></label><input type="checkbox" id="${id}" class="margin-toggle"/><span class="marginnote">${content}</span>`;
+  });
+
   // Copying non-template content to _site
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("misc");
   eleventyConfig.addPassthroughCopy("assets");
+  eleventyConfig.addPassthroughCopy("drafts/using-proteinguide/esm-sampling-crop.mp4");
 
   // Define a paired shortcode called 'colorBold'
   eleventyConfig.addPairedShortcode("colorBold", function(content, color) {
