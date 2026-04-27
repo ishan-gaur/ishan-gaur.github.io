@@ -44,6 +44,8 @@ function renderRewardHackingGraphic(container) {
   const variant = container.dataset.proteinguideRewardHacking || "predictor-extrapolation";
 
   const isPredictorExtrapolation = variant === "predictor-extrapolation";
+  const isGeneratorShift = variant === "generator-shift";
+  const isLeftShiftDiffusePredictor = variant === "left-shift-diffuse-predictor";
 
   // Match the baseline schematic layout across both reward-hacking variants.
   const cols = 14;
@@ -62,10 +64,13 @@ function renderRewardHackingGraphic(container) {
   const trainingRegion = { x0: 4, x1: 9, y0: 2, y1: 7 };
   const shiftedRegion = { x0: 10, x1: 12, y0: 2, y1: 7 };
   const coreRegion = { x0: 5, x1: 9, y0: 3, y1: 6 };
+  const leftBlueRegion = { x0: 0, x1: 4, y0: 2, y1: 7 };
+  const leftBlueCore = { x0: 1, x1: 4, y0: 3, y1: 6 };
 
   const ariaByVariant = {
     "predictor-extrapolation": "Reward hacking variation one. Blue checks mark realistic sequences in a central region while orange checks spread into areas with few blue checks, indicating predictor extrapolation.",
     "generator-shift": "Reward hacking variation two. The red box marks the assay training region. Shifted guided samples are highlighted with orange glow, and the cases with both blue and orange checks are circled in black.",
+    "left-shift-diffuse-predictor": "Variation three. Blue realistic support is concentrated to the left of the red box, while orange predictive support is diffuse across the map. Cells outside the red box with both blue and orange checks are circled in black.",
   };
 
   const svg = el("svg", {
@@ -155,7 +160,7 @@ function renderRewardHackingGraphic(container) {
 
         isOrange = orangeInsideRegion || orangeOutsideRegion;
         hasOutsideOrangeGlow = orangeOutsideRegion;
-      } else {
+      } else if (isGeneratorShift) {
         const realismNoise = hash01(col + 11, row + 7);
         const fitnessNoise = hash01(col + 23, row + 17);
         const blueBlob = Math.exp(-(((col - 6.3) ** 2) / 7 + ((row - 4.3) ** 2) / 3.8));
@@ -169,6 +174,25 @@ function renderRewardHackingGraphic(container) {
         isOrange = inCoreTrain || shiftedHighScore;
         hasOutsideOrangeGlow = shiftedHighScore;
         circleBlueOrangeGlow = shiftedHighScore && isBlue && isOrange;
+      } else if (isLeftShiftDiffusePredictor) {
+        const realismScore = hash01(col + 7, row + 19);
+        const fitnessScore = hash01(col + 29, row + 5);
+        const inLeftBlueRegion =
+          col >= leftBlueRegion.x0 && col <= leftBlueRegion.x1 && row >= leftBlueRegion.y0 && row <= leftBlueRegion.y1;
+        const inLeftCore =
+          col >= leftBlueCore.x0 && col <= leftBlueCore.x1 && row >= leftBlueCore.y0 && row <= leftBlueCore.y1;
+
+        // Blue support is concentrated to the left of the red training box.
+        isBlue = (inLeftBlueRegion && realismScore > 0.14) || (!inLeftBlueRegion && realismScore > 0.995);
+
+        // Diffuse predictor: assigns plausibility widely, including outside red box.
+        const insideRedOrange = inTraining && fitnessScore > 0.52;
+        const outsideRedOrange = !inTraining && fitnessScore > 0.58;
+        const leftCoreBoost = inLeftCore && fitnessScore > 0.47;
+        isOrange = insideRedOrange || outsideRedOrange || leftCoreBoost;
+
+        const outsideRed = !inTraining;
+        circleBlueOrangeGlow = outsideRed && isBlue && isOrange;
       }
 
       if (hasOutsideOrangeGlow) {
