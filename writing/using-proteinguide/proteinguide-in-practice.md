@@ -1,21 +1,38 @@
 ---
 title: ProteinGuide in Practice
 layout: blog.liquid
+date-updated: 2026-04-26
 ---
 
 <section>
 
-## ProteinGuide in Practice {#workflow}
+This post assumes some basic familiarity with generative models, training regression models, Bayes' rule, and ProteinGuide itself. {% sidenote "For a brief introduction, checkout my [Intuitive Introduction to ProteinGuide](../ddm-and-pg-intuition/)." %} It is intended for those with some background in machine learning who are interested in applying ProteinGuide in their research.
 
-This post assumes some basic familiarity with generative models, training regression/classification models, and Bayes' rule. {% sidenote "I will be posting intuitive introductions to discrete diffusion and guidance on [my substack](https://substack.com/@ishangaurr) soon." %} It is intended for those with some background in machine learning who are interested in applying ProteinGuide in their research.
+{% marginnote "If you're interested in generative modeling, I post pieces that synthesize my learnings about this field [on my substack](https://substack.com/@ishangaurr). Two upcoming essays that I'm particularly excited about will investigate the origins of our probabilistic perspective in generative modeling. I'll not only be tracing through the history of generative models in machine learning (Diffusion, GPT, GANs, VAEs, Deep Belief Networks, etc.) but will also examine the intellectual precursors of the field, including topics like the invention of Monte Carlo methods to create the atomic bomb and the invention of Markov chains to analyze Russian literature. [Subscribe to my substack](https://substack.com/@ishangaurr/subscribe) to get notified when these pieces come out." %}
 
-{% marginnote "If you're interested in generative modeling, I post pieces that synthesize my learnings about this field [on my substack](https://substack.com/@ishangaurr). Two upcoming essays that I'm particularly excited about will investigate the foundations of why we take a probabilistic perspective in designing generative models in the first place and where it might be limiting research today. I'll not only be tracing through the history of generative models in machine learning (Diffusion, GPT, GANs, VAEs, Deep Belief Networks, etc.) but also the intellectual precursors of the field, including how Monte Carlo methods were invented to create the atomic bomb and how Markov chains were invented to analyze Russian literature. [Subscribing to my substack](https://substack.com/@ishangaurr/subscribe) is a great way to get notified when these pieces come out." %}
+What follows is a living document recording the Listgarten lab's current best practices for using ProteinGuide. The post is divided into three sections. The first section describes a conceptual framework for how ProteinGuide works in the ideal case. The second uses this framework to categorize the main failure modes you might encounter. It then covers how to address them. The final section organizes these ideas into the reasonable default workflow for using ProteinGuide in the lab.
 
-What follows is a living document recording the Listgarten lab's current best practices for using ProteinGuide. The post is divided into three sections. The first section describes a conceptual framework for how ProteinGuide works in the ideal case. The second uses this framework to categorize the main failure modes you might encounter and how to address them. The final section organizes these ideas into the default workflow we start with for using ProteinGuide with our collaborators.
+## Understanding ProteinGuide and its Vulnerabilities
 
-<!-- GRAPHIC DESCRIPTION: A large array of boxes connected by lines in a grid. Each one represents a sequence and the other sequences that are one mutation away from it. Each box is split in two diagonally. Most have a light gray x in both boxes. Some have an orange checkmark symbolizing that these are realistic proteins. Some have a blue checkmark symbolizing that these are proteins that solve the task of interest. A medium sized region, containing all of the blue checkmarks and some neighboring orange checkmarks is outlined in red. This is the region of sequences that we think is reasonable to sample from, and which our experimental data is collected from. -->
+ProteinGuide is trying to sample from a function-conditioned distribution over proteins using classifier guidance. The key equation to remember is the following application of Bayes' rule:
 
-<figure class="fullwidth">
+{%- capture predictive_for_continuous -%}
+When your function of interest is a discerete variable, like a binary label for whether a sequence adopts a particular fold, the notation to the left suffices. In those cases, the predictive model will be a classifier. When the function of interest is a continuous variable, such as binding affinity, $p(y \mid x)$ is shorthand for $p(y > \tau \mid x)$, where $\tau$ is the threshold for function that you want to achieve with your library. When $y$ is continuous, the predictive model is a regression model and is normally setup to parameterize an tractable distribution over function values (e.g. predicting the mean and variance of a Gaussian). The threshold $\tau$ can then be applied later, when actually sampling, to get a probability.
+{%- endcapture -%}
+<br>
+
+<figure><p>$$p(x \mid y) \propto p(y \mid x) \cdot p(x).$$</p></figure>
+
+In this equation,
+- $p(x)$ is your prior distribution over sequences for the task. In ProteinGuide, this is instantiated as a pretrained sequence generative model.
+- $p(y \mid x)$ is your predictive model of protein function. It estimates the probability{% sidenote predictive_for_continuous %} that a sequence $x$ can acheive your function of interest $y$.
+- $p(x \mid y)$ is what we actually want to sample from: plausible sequences that solve the task.
+
+For more background on ProteinGuide, check out the [overview](../../using-proteinguide/index.html#overview) on the homepage of this series of posts.
+
+Now let's develop a conceptual framework for understanding how ProteinGuide should work in the ideal case. Consider the following schematic of the sequence space for a given design problem. Sequences with an blue check are those that are predicted to be realistic by the generative model, and sequences with an orange check are those that are predicted to solve the task by the predictive model.
+
+<figure>
   <div data-proteinguide-graphic></div>
   <figcaption>
     Sequence-space sketch generated client-side. Gray X marks are mostly implausible sequences,
@@ -25,10 +42,22 @@ What follows is a living document recording the Listgarten lab's current best pr
 </figure>
 <script type="module" src="/assets/js/proteinguide-workflow-graphic.js"></script>
 
+In the ideal scenario, the sequence-function data from our first library is concentrated on the intersection of these two. This ensures that we are likely to find good sequences in the next rounds, that the predictive model is well-trained on the same region of sequence space that the generative model concentrates in, and that the generative model doesn't have too much mass away from the region of sequence space that we're really interested in. 
 
-All the failure modes we've found end up being manifestations of one of the following two problems:
-- you have a design objective that the generative model doesn't tend to satisfy and isn't something you have assay labeled data for to train a predictive model
-- the generative model's sequences are out of distribution for the predictive model. this is usually because the training data was not collected using the generative model.
+When these conditions hold, ProteinGuide works well. After all, the mathematical machinery underlying the technique stems from the basic axioms of probability. If we're having trouble with ProteinGuide, it's because our mathematical assumptions don't match the reality of the computational pipeline we've setup.
+
+So far, in our experience, every time we find a "new" failure mode for ProteinGuide, it turns out to be a manifestation of one of the following two basic problems:
+1. the way your generative model is set up, it doesn't actually capture all your prior knowledge about the task and it often produces sequences that are clearly suboptimal for your task of interest, or
+2. the sequences produced by the generative model are out of distribution for the predictive model; equivalently, the generative model produces sequences that are very different from those in your assay labeled data.
+
+If you haven't run your first experimental library yet, congratulations! You can still avoid these problems pretty safely{% sidenote "Click [here]() to jump to our workflow that includes running the first library." %}. Just generate the sequences for your first library using the generative model and be careful to setup that sampling problem to bake-in as much of your prior knowledge about the task as possible. This can include:
+- picking a specific region of the protein to design instead of the whole thing
+- biasing the generative model towards wildtype sequences
+- filtering the generations with plddt or refolding metrics
+- you can even [guide with the stability predictor](https://ishan-gaur.github.io/proteingen/examples/stability-guided-generation/) from our paper
+Then, in the second round, make sure to set up the generation pipeline the same way, just using the guided model instead. The only caveat is that, if you filter generated sequences–such as selecting generated sequences for the library by plddt–you may need to finetune the generative model on the library sequences first. Otherwise the generative process will be OOD for the predictive model, since it will be no longer be biased towards high plddt sequences like the library was.
+
+On the other hand, If you already have some data collected, don't worry, that's what this guide is for. We'll walk you through how to reason about setting up ProteinGuide to work for your use-case.
 
 Both of these problems can be solved by sampling the initial library with the generative model you plan to use for later rounds of design. During that process, you will have to carefully contend with what the generative model gives you and pick a region to design, finetune the model, filter its sequences with methods like alphafold, or bias the generative model logits towards wildtype. The only downside is that a simple baseline method for generating the initial library, like a DMS scan of the WT, is still likely to produce sequences that outperform the generative model on average. There are two ways of looking at this. So long as you can get a predictive model with good performance on a held-out set, guidance will improve function in the next round. You can always set the WT function value as the cutoff for guidance to beat. The other way goes back to designing a base generative process you like. You can always bias the models generations towards wildtype. You can also train a predictive model on pretrained model generations and noise them to have a predictor of distance to WT, using that to gudie towards WT-like sequences.
 

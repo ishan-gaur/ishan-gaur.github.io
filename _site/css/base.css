@@ -225,7 +225,9 @@ section > table {
 /* 50 + 5 == 55, to be the same width as paragraph */
 section > dl,
 section > ol,
-section > ul {
+section > ul,
+section > nav > ol,
+section > nav > ul {
     width: 50%;
     -webkit-padding-start: 5%;
 }
@@ -440,7 +442,9 @@ label.margin-toggle:not(.sidenote-number) {
 
     section > dl,
     section > ol,
-    section > ul {
+    section > ul,
+    section > nav > ol,
+    section > nav > ul {
         width: 90%;
     }
 

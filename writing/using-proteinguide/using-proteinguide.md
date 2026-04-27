@@ -1,9 +1,11 @@
 ---
 title: Using ProteinGuide
-layout: blog.liquid
+layout: base.liquid
 ---
 
 <section>
+
+# Using ProteinGuide
 
 Earlier this year, we released a [pre-print](https://arxiv.org/abs/2505.04823) entitled ProteinGuide. It describes a general method for blending wet-lab data and pretrained generative models for library design.
 
@@ -13,16 +15,12 @@ If you have any questions or comments, we'd love to hear from you! Feel free to 
 
 ## Resources
 
-<nav>
-  <ol>
-    <li><a href="./ddm-and-pg-intuition/">Intuitive Introduction to ProteinGuide</a></li>
-    <li><a href="https://arxiv.org/abs/2505.04823">ProteinGuide Paper</a></li>
-    <li><a href="./proteinguide-in-practice/">Using ProteinGuide in Practice</a></li>
-    <li><a href="https://ishan-gaur.github.io/proteingen/workflows/protein-guide/">ProteinGuide Python Workflow on ProtGen</a></li>
-  </ol>
-</nav>
+1. <a href="./ddm-and-pg-intuition/">Intuitive Introduction to ProteinGuide</a>
+2. <a href="https://arxiv.org/abs/2505.04823">ProteinGuide Paper</a>
+3. <a href="./proteinguide-in-practice/">Using ProteinGuide in Practice</a>
+4. <a href="https://ishan-gaur.github.io/proteingen/workflows/protein-guide/">ProteinGuide Python Workflow on ProteinGen</a>{% sidenote "A rough version is available, but this post is under active development." %}
 
-## Overview
+## Overview {#overview}
 
 Pretrained generative models such as ESM3, ProteinMPNN, and DPLM, are trained to fill in partially masked protein sequences. This enables them to generate full sequences that seem like "real" proteins, but as protein designers, they offer a very limited interface for us to specify our design goals. These goals might go beyond specifiying a static structure, including complex properties such as catalytic activity, on-/off-target specificity, and sensitivity to environmental factors like temperature or pH.
 
