@@ -50,12 +50,18 @@ So far, in our experience, every time we find a "new" failure mode for ProteinGu
 1. the way your generative model is set up, it doesn't actually capture all your prior knowledge about the task and it often produces sequences that are clearly suboptimal for your task of interest, or
 2. the sequences produced by the generative model are out of distribution for the predictive model; equivalently, the generative model produces sequences that are very different from those in your assay labeled data.
 
-If you haven't run your first experimental library yet, congratulations! You can still avoid these problems pretty safely{% sidenote "Click [here]() to jump to our workflow that includes running the first library." %}. Just generate the sequences for your first library using the generative model and be careful to setup that sampling problem to bake-in as much of your prior knowledge about the task as possible. This can include:
-- picking a specific region of the protein to design instead of the whole thing
+How easy it is to solve these problems depend on if you already have some assay labeled data collected already.
+
+## Scenario 1: No wet-lab data yet
+
+If you haven't run your first experimental library yet, congratulations! You can avoid these problems pretty safely{% sidenote "Click [here]() to jump to our workflow that includes running the first library." %}. Just generate the sequences for your first library using the generative model. The main thing you need to get right is to setup the sampling problem to bake-in as much of your prior knowledge about the task as possible. Don't just use the unconditional generative model directly. Play with:
+- picking a specific region of the protein to design
 - biasing the generative model towards wildtype sequences
 - filtering the generations with plddt or refolding metrics
-- you can even [guide with the stability predictor](https://ishan-gaur.github.io/proteingen/examples/stability-guided-generation/) from our paper
-Then, in the second round, make sure to set up the generation pipeline the same way, just using the guided model instead. The only caveat is that, if you filter generated sequences–such as selecting generated sequences for the library by plddt–you may need to finetune the generative model on the library sequences first. Otherwise the generative process will be OOD for the predictive model, since it will be no longer be biased towards high plddt sequences like the library was.
+- you can even [guide with the stability predictor](https://ishan-gaur.github.io/proteingen/examples/stability-guided-generation/) from our paper.
+Then, to sample the second round of designs, set up the generation pipeline the **same** way. Just take care to plug in the guided model wherever you used the pretrained model the first time around{% sidenote "If you use the ProteinGen package, this just corresponds to, e.g. changing wherever you have <code>ESM3</code> in your code to <code>DEG(ESM3, predictive_model)</code>. push " %}. The only caveat is that, if you filter generated sequences–such as selecting generated sequences for the library by plddt–you may need to finetune the generative model on the library sequences first. Otherwise the generative process will be OOD for the predictive model, since it will be no longer be biased towards high plddt sequences like the library was.
+
+## Scenario 2: You collected wet-lab data without the pretrained generative model
 
 On the other hand, If you already have some data collected, don't worry, that's what this guide is for. We'll walk you through how to reason about setting up ProteinGuide to work for your use-case.
 
