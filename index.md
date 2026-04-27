@@ -21,9 +21,9 @@ Links:&emsp;<a href='https://x.com/Ishan__Gaur'>Twitter</a>&emsp;<a href='ishang
 <section>
 
 ## What's New?
+
+- [4/27] Released [ProteinGen](https://ishan-gaur.github.io/proteingen/) during Jenn's talk at the Broad. ProteinGen is a package for leveraging wet-lab data in ML-based library design. It provides a simple interface for conditioning, finetuning, and sampling from all common sequence design models (ESM3, ProteinMPNN, ProGen3. It provides a lot of tools for effectively using coding agents for assembling and testing your library design pipeline.
 - [4/11] Put out a little [AF3 Fast API server](https://github.com/ishan-gaur/af3-server). It's intended to be used on SLURM machines and shared across users in a lab. That way one machine running one instance of AF3 can be used by everyone.
-- [4/9] Re-released DFM as [Prot★](https://ishan-gaur.github.io/proteingen/) ("ProtStar"): it's been expanded with several new protein design workflows, utilities for folding proteins and creating MSA datasets, and extensive tooling to help you leverage agents for writing library design pipelines.
-- [2/23] Released [DFM](https://github.com/ishan-gaur/dfm): a small library providing a uniform interface for MLMs, DDMs, DFMs, AO-ARMs, and even AR models. It facilitates plug-and-play experimentation with new sampling, conditioning, and finetuning methods.
 - [2/23] Bear Xiong and I give a talk on [ProteinGuide](https://arxiv.org/abs/2505.04823b) at [Profluent](https://www.profluent.bio/)
 
 </section>

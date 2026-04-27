@@ -2,30 +2,23 @@
 title: Writing
 layout: base.liquid
 ---
+## By Topic
 
-<!-- Need to -->
+<nav>
+  <ol>
+    <li><a href="./archival-ml/">Archival ML</a></li>
+    <li><a href="./using-proteinguide/">Using ProteinGuide</a></li>
+  </ol>
+</nav>
 
-<section>
+# Most Recent Posts
 
-## Archival ML
-
-I love living in the current age of machine learning research. We've begun to realize many of the magical creative capabilities people once imagined for the technology{% sidenote "certainly for language, voice, coding, and images" %}, but we're still not sure what an insightful, practical theory{% sidenote "[Kuhn's](https://www.amazon.com/Structure-Scientific-Revolutions-50th-Anniversary/dp/0226458121?sr=1-1) view is that a useful theory helps us select a minimal set of properties from all the possible measurable attributes of a system, allowing the scientific community to drastically reduce the complexity of the problem. For successful theories, the resulting abstractions precipitate immense fecundity, enabling scientists to ask all kinds of new questions and make rapid progress on them." %} of machine learning will look like.<!-- Who knows which parts of probability and statistics, learning theory, optimization, etc. will end up being the "Newton's Laws" or "Central Dogma" for AI in the future.-->{% sidenote "See these footnotes for some recent papers[^1][^2][^3] that are asking some very interesting questions." %}
-
-Naturally, I've become obsessed with understanding how we got here, so I've been reading old ML papers and piecing together a history of how the ideas we take for granted came to be. <!-- Most of all, I'm hoping to glean some perspective on how the field's mental models have changed over time. --> Along this journey, I've found several pivotal papers which most researchers in my generation have probably heard of, but never read personally. I think of these pieces as "Archival ML". They represent, not just an important idea, but herald an impactful change in worldview for the field. Over the next few months, I'm hoping to write a bit about my favorite archival papers and hope that the posts will get you interested in taking a look at them as well.
-
-The first post will be about Boltzmann Machines, followed by a piece on Shannon's Theory of Communication{% sidenote "Information Theory" %}. Eventually, I'm hoping to work through the lineage of discrete generative models from Markov to Discrete Diffusion{% sidenote "Turns out the first algorithm that looks like discrete diffusion actually predates GPT and transformers altogether!" %}.
-
-<!-- I want to share the experience of rediscovering what was most beautiful about their work with you all. Some examples that I'm hoping to get to include Shannon's Theory of Communication (Information Theory), Markov Chains, "Discrete Diffusion"{% sidenote "[NADEs](https://jmlr.org/papers/v17/16-272.html) were essentially 'discrete diffusion' models known by another name, and predate GPT/BERT/MLMs!" %} and more. In this first post, I'm going to start with Boltzmann Machines which roughly refers to a line of work pioneered by Geoff Hinton, along with his students and collaborators in the 80s and 90s. Specifically, I'm going to cover the use of *Restricted* Boltzmann Machines in **Deep Belief Networks**. Curiously, Hinton and his collaborators first popularized unsupervised "pre-training" of these networks to get good initializations for training image classification models not for generative modeling. About a decade later, his student [Ilya Sutskever](https://en.wikipedia.org/wiki/Ilya_Sutskever){% sidenote "Whose [thesis](https://www.cs.utoronto.ca/~ilya/pubs/ilya_sutskever_phd_thesis.pdf) is low-key fire." %} would go on to lead the revolution in generative modeling and LLM scaling at OpenAI. --> 
-
-### Posts
-- The Elegance of Restricted Boltzmann Machines and the Effectiveness of an Intuitive but Improper Learning Algorithm{% sidenote "Coming Soon!" %}
-
-</section>
-
-[^1]: How should we bring the computational or algorithmic properties of the observer into our understanding of the information that can be learned from a dataset? See, ["From Entropy to Epiplexity"](https://arxiv.org/abs/2601.03220).
-
-[^2]: Should the unit of analysis in stabilizing neural network optimization be the "layer" or "module" instead of the whole network? See the [work](https://docs.modula.systems/) of [Jeremy](https://thinkingmachines.ai/blog/modular-manifolds/) [Bernstein](https://jeremybernste.in/writing/deriving-muon) and collaborators on [Muon](https://kellerjordan.github.io/posts/muon/)
-
-
-[^3]: How should we compare learning objectives when we know we won't minimize the loss? Is the traditional analysis of the minimizers being desirable enough? (Haven't looked into this one in detail yet, but [hmu](/index.html) if you have recs!)
-
+<ul>
+{%- for post in collections.all reversed -%}
+  {%- if post.data.layout == "blog.liquid" and post.inputPath contains "./writing/" and post.inputPath contains ".md" -%}
+    {%- unless post.inputPath contains "-draft.md" -%}
+  <li>[{{ post.date | date: "%Y-%m-%d" }}] <a href="{{ post.url }}">{{ post.data.title }}</a></li>
+    {%- endunless -%}
+  {%- endif -%}
+{%- endfor -%}
+</ul>

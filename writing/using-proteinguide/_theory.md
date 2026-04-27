@@ -1,56 +1,7 @@
----
-title: A UserGuide for ProteinGuide
-layout: blog.liquid
----
 
 <section>
 
-<!--
-Benefits of guidance vs DPO--not SFT
-- Lighter weight so you can change design objectives on the fly
-- Easier to ensemble predictors than generative models (although LoRA)
-- You have more control over the architecture of the predictor than the generative model, so you can bake in more domain knowledge
-- You can do hacky stuff like setting hard minimums for mutational distance
-- DPO might have noisier gradient estimates because order matters?? Maybe that's shared for both though.
--->
-Generative models of protein sequence, such as ProteinMPNN, ESM, and ProGen, lack an interface for users to specify their functional design objectives. Models like ProteinMPNN and ESM3 can be used to generate sequences that fold into a target backbone, but they have no understanding of the biological properties we actually care about. <!-- For example, someone designing a biologic might like to achieve a certain balance of binding affinity, off-target activity, and thermostability. -->
-
-In our recent pre-print, [ProteinGuide](https://arxiv.org/abs/2505.04823), we describe a method that allows users to design libraries according to multiple functional constraints simultaneously. It also enables users to get more out of pretrained generative models by leveraging their wet-lab data during the design process. In this guide, we will review how ProteinGuide works, how to troubleshoot some common issues, and what a practical workflow for using ProteinGuide looks like.
-
-ProteinGuide provides a way to extract sequences from a pretrained {% color "blue" %}generative model{% endcolor %} that are predicted to satisfy functional properties we care about. To do this, ProteinGuide uses a lightweight {% color "darkorange" %}property prediction model{% sidenote "<img src='predictive_model.png' alt='Predictive model diagram' style='max-width:100%;height:auto' />" %}{% endcolor %}, trained on your wet-lab data, to iteratively "guide" the generative model towards sequences with higher fitness.
-
-Although ProteinGuide is theoretically sound, its performance can be contingent on whether or not:
-1. the {% color "blue" %}generative model{% endcolor %} produces relevant sequences for the task (even if they are suboptimal), and
-2. the {% color "darkorange" %}predictive model{% endcolor %} sufficiently captures your remaining preferences about which proteins would be desireable.
-
-These two assumptions can be restated as:
-1. the generative model must accurately capture your {% color "blue" %}prior beliefs{% endcolor %} about which sequences make sense for this task
-2. the predictive model must be able to determine which sequences from your prior have {% color "darkorange" %}sufficiently high fitness{% endcolor %}, based on your *wet-lab data*.
-
-In this guide, we first review the basic procedure for using ProteinGuide, assuming these two conditions hold. Then we examine common ways in which these assumptions break down, and how these issues can be addressed. Finally, we walk through a practical workflow{% sidenote "In order to make it easier to use, ProteinGuide [is now available](https://ishan-gaur.github.io/proteingen/workflows/protein-guide/) in the [ProtStar](https://ishan-gaur.github.io/proteingen/) python package for ML-based libary design."%} for ProteinGuide. Each section is fairly self-contained, so feel free to jump to the section that is most relevant to you.
-
-<!-- TODO link the FAQs -->
-<!-- TODO write the post on unifying discrete generative models -->
-
-</section>
-
-<section>
-
-## Table of Contents
-
-<nav>
-  <ol>
-    <li><a href="#intro">ProteinGuide in Theory</a></li>
-    <li><a href="#reality">Reality Check</a></li>
-    <li><a href="#workflow">A Practical Workflow</a></li>
-  </ol>
-</nav>
-
-</section>
-
-<section>
-
-## ProteinGuide in Theory {#intro}
+## ProteinGuide in a Nutshell {#intro}
 
 This section provides an intuitive introduction{% marginnote "For readers with a statistics or machine learning background, we provide some formal definitions and equations in the margins, but feel free to skip these." %} to protein sequence generative models and ProteinGuide. 
 
@@ -108,20 +59,12 @@ Now let's say, for our {% color "darkorange" %}design task{% endcolor %}, we wan
 
 Now notice that the {% color "purple" %}*conditional* generative model{% endcolor %}{% sidenote "Conditional generative model meaning a generative model that is taking into additional information about the desired protein at generation time. In this case, it is 'conditioning' on the fact that we want at least one L—it builds character, lol." %} has different probabilities for the two choices. The probability of adding a <code>W</code> went down from $2/3$ to $1/2$, and the probability of adding an <code>L</code> went up from $1/3$ to $1/2$. 
 
-In ProteinGuide, the {% color "darkorange" %}predictive model{% endcolor %} tells us the probability that the {% color "blue" %}generative model{% endcolor %} will produce a sequence that satisfies our {% color "darkorange" %}design task{% endcolor %}. To get the {% color "purple" %}guided conditional model{% endcolor %}—the model that randomly samples from the sequences that satisfy our requirements—it turns out all you have to do is multiple the pretrained generative models proabbilities by the predictive model's probabilities and re-normalize. The intution for this is just that:{% marginnote "Each fraction is colored by the model that estimates it. The blue fraction (real proteins / all sequences) is what proportion of the whole tree the generative model thinks look like plausible sequences. The orange fraction (high-fitness proteins / real proteins) is what proportion of the generative model's sequences the predictive model estimates to be high fitness. Multiplying them gives the ProteinGuide conditional model (high-fitness proteins / all sequences) which picks out only the high fitness variants in the sequence landscape." %}
+In ProteinGuide, the {% color "darkorange" %}predictive model{% endcolor %} tells us the probability that the {% color "blue" %}generative model{% endcolor %} will produce a sequence that satisfies our {% color "darkorange" %}design task{% endcolor %}. To get the {% color "purple" %}guided conditional model{% endcolor %}—the model that randomly samples from the sequences that satisfy our requirements—it turns out all you have to do is multiple the pretrained generative models proabbilities by the predictive model's probabilities and re-normalize. The intuition for this is just that:{% marginnote "Each fraction is colored by the model that estimates it. The blue fraction (real proteins / all sequences) is what proportion of the whole tree the generative model thinks look like plausible sequences. The orange fraction (high-fitness proteins / real proteins) is what proportion of the generative model's sequences the predictive model estimates to be high fitness. Multiplying them gives the ProteinGuide conditional model (high-fitness proteins / all sequences) which picks out only the high fitness variants in the sequence landscape." %}
 
 $$\color{purple}{\frac{\text{Proteins with high fitness}}{\text{All sequences}}} = \color{blue}{\frac{\text{Proteins}}{\text{All sequences}}} \times \color{darkorange}{\frac{\text{High fitness proteins}}{\text{Real proteins}}}$$
 
 All that's left is to train the predictive model. This ends up being quite simple. We take the sequences and fitness measurements from our wet-lab data and train a model to predict the fitness from the sequence. The only twist is that before inputting the sequence to the predictive model, we randomly pick a subset of the positions to mask. Nevertheless, this ends up just being a standard supervised learning problem, and you can use any architecture or training method you like. Because our predictive model ends up predicting the probability of success from a partially masked, or "noisy" sequence, it is sometimes referred to as a noisy classifier or noisy predictor.
 
 <!--**Margin note on noising the samples.**-->
-
-## Reality Check {#reality}
-
-
-
-## A Practical Workflow {#workflow}
-
-
 
 </section>
