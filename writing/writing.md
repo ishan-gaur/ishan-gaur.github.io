@@ -11,7 +11,7 @@ layout: base.liquid
   </ol>
 </nav>
 
-# Most Recent Posts
+## Most Recent Posts
 
 <ul>
 {%- for post in collections.all reversed -%}
