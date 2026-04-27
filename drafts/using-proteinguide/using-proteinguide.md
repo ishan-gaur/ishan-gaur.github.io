@@ -15,9 +15,9 @@ If you have any questions or comments, we'd love to hear from you! Feel free to 
 
 <nav>
   <ol>
-    <li><a href="./ddm-and-pg-intuition.md">Intuitive Introduction to ProteinGuide</a></li>
+    <li><a href="./ddm-and-pg-intuition/">Intuitive Introduction to ProteinGuide</a></li>
     <li><a href="https://arxiv.org/abs/2505.04823">ProteinGuide Paper</a></li>
-    <li><a href="./proteinguide-in-practice.md">Using ProteinGuide in Practice</a></li>
+    <li><a href="./proteinguide-in-practice/">Using ProteinGuide in Practice</a></li>
     <li><a href="https://ishan-gaur.github.io/proteingen/workflows/protein-guide/">ProteinGuide Python Workflow on ProtGen</a></li>
   </ol>
 </nav>
@@ -28,7 +28,7 @@ Pretrained generative models such as ESM3, ProteinMPNN, and DPLM, are trained to
 
 ProteinGuide provides a way to extract {% color "blue" %}sequences{% endcolor %} from a {% color "blue" %}pretrained generative model{% sidenote "<img src='generative_model.png' alt='Generative model diagram' style='max-width:100%;height:auto' />" %}{% endcolor %}—like ProteinMPNN, ESM, or ProGen—that are predicted to satisfy these {% color "darkorange" %}functional properties{% endcolor %} of interest. To do this, ProteinGuide uses a lightweight {% color "darkorange" %}property predictive model{% sidenote "<img src='predictive_model.png' alt='Predictive model diagram' style='max-width:100%;height:auto' />" %}{% endcolor %} to iteratively "guide" the generative model towards sequences with higher fitness. This predictive model is *trained on your wet-lab data*, allowing you to leverage your experimental results to design better proteins, and improve your designs over time as you collect more data.
 
-The <a href="./ddm-and-pg-intuition.md">Intuitive Introduction to ProteinGuide</a></li> and <a href="https://arxiv.org/abs/2505.04823">ProteinGuide Paper</a> describe ProteinGuide and its applications at length.
+The <a href="./ddm-and-pg-intuition/">Intuitive Introduction to ProteinGuide</a></li> and <a href="https://arxiv.org/abs/2505.04823">ProteinGuide Paper</a> describe ProteinGuide and its applications at length.
 
 Although ProteinGuide is theoretically sound, its performance can be contingent on whether or not:
 1. the {% color "blue" %}generative model{% endcolor %} produces relevant, even if suboptimal, sequences for your task, and
@@ -38,7 +38,7 @@ These two assumptions can be restated as:
 1. the generative model must capture your {% color "blue" %}prior beliefs{% endcolor %} about which sequences make sense for this task
 2. the predictive model must accurately determine, based on your {% color "darkorange" %}wet-lab data{% endcolor %}, which sequences from your {% color "blue" %}prior{% endcolor %} are most desireable.
 
-In <a href="./proteinguide-in-practice.md">Using ProteinGuide in Practice</a>, we discuss how to evaluate these assumptions and make ProteinGuide work for your specific use-case. 
+In <a href="./proteinguide-in-practice/">Using ProteinGuide in Practice</a>, we discuss how to evaluate these assumptions and make ProteinGuide work for your specific use-case. 
 
 When customizing ProteinGuide to your particular situation, its useful to be able to test out several different options for your library design pipeline *in silico* before you have to commit any wetlab budget. To this end, we've recently released the [ProteinGen Python package](https://github.com/ishan-gaur/proteingen). 
 
