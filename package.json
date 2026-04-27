@@ -9,6 +9,6 @@
     "markdown-it-image-figures": "^2.1.1"
   },
   "scripts": {
-    "build-ghpages": "npx @11ty/eleventy"
+    "build-ghpages": "ELEVENTY_RUN_MODE=build npx @11ty/eleventy"
   }
 }
