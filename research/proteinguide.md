@@ -1,14 +1,20 @@
 ---
 title: Guide your favorite protein sequence generative model
+slug: proteinguide
 venue: arXiv preprint arXiv:2505.04823
 pub_date: May 7, 2025
 sort_date: 2025-05-07
 authors: Junhao Xiong<sup>*</sup>, <u>Ishan Gaur<sup>*</sup></u>, Hunter Nisonoff<sup>*</sup>, Maria Lukarska<sup>*</sup>, Luke M Oltrogge, David F Savage, Jennifer Listgarten
 equal_contribution_note: "* Equal contribution"
+paper_link: https://arxiv.org/abs/2505.04823
 links: [
   {
     url: https://arxiv.org/abs/2505.04823,
     text: "Paper"
+  },
+  {
+    url: ./proteinguide/,
+    text: "Blog Posts"
   },
   {
     url: https://github.com/junhaobearxiong/protein_discrete_guidance,

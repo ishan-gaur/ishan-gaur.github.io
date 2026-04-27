@@ -2,6 +2,7 @@
 title: Ishan Gaur
 layout: base.liquid
 ---
+{% assign proteinguide = collections.paper | where_exp: 'item', 'item.data.slug == "proteinguide"' | first %}
 <!-- <img src="/assets/ishan.png" alt="headshot" width="250"> -->
 
 <section>
@@ -22,9 +23,9 @@ Links:&emsp;<a href='https://x.com/Ishan__Gaur'>Twitter</a>&emsp;<a href='ishang
 
 ## What's New?
 
-- [4/27] Released [ProteinGen](https://ishan-gaur.github.io/proteingen/) during Jenn's talk at the Broad. ProteinGen is a package for leveraging wet-lab data in ML-based library design. It provides a simple interface for conditioning, finetuning, and sampling from all common sequence design models (ESM3, ProteinMPNN, ProGen3. It provides a lot of tools for effectively using coding agents for assembling and testing your library design pipeline.
+- [4/27] Released [ProteinGen](https://ishan-gaur.github.io/proteingen/){% sidenote "ProteinGen is a package for leveraging wet-lab data in ML-based library design. It provides a simple interface for conditioning, finetuning, and sampling from all common sequence design models: ESM3, ProteinMPNN, ProGen3, etc. It provides several tools for effectively using coding agents for assembling and testing your library design pipeline." %} during Jenn's talk at the Broad.
 - [4/11] Put out a little [AF3 Fast API server](https://github.com/ishan-gaur/af3-server). It's intended to be used on SLURM machines and shared across users in a lab. That way one machine running one instance of AF3 can be used by everyone.
-- [2/23] Bear Xiong and I give a talk on [ProteinGuide](https://arxiv.org/abs/2505.04823b) at [Profluent](https://www.profluent.bio/)
+- [2/23] Bear Xiong and I give a talk on [ProteinGuide]({{ proteinguide.data.paper_link }}) at [Profluent](https://www.profluent.bio/)
 
 </section>
 

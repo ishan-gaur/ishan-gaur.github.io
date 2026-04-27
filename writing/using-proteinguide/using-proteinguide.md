@@ -7,16 +7,17 @@ layout: writing.liquid
 
 # Using ProteinGuide
 
-Earlier this year, we released a [pre-print](https://arxiv.org/abs/2505.04823) entitled ProteinGuide. It describes a general method for blending wet-lab data and pretrained generative models for library design.
+Earlier this year, we released a [pre-print](https://arxiv.org/abs/2505.04823) entitled ProteinGuide{% sidenote "![ProteinGuide overview](proteinguide.png)" %}. It describes a general method for blending wet-lab data and pretrained generative models for library design.
 
-This page contains a brief overview of ProteinGuide and an index of resources to help you use it. These links cover everything from getting up to speed on the [basics of generative modeling](./ddm-and-pg-intuition.md), to making [ProteinGuide work in practice](./proteinguide-in-practice.md), and [implementing your first pipeline](https://ishan-gaur.github.io/proteingen/workflows/protein-guide/) in Python.
+This page contains a brief overview of ProteinGuide and an index of resources to help you use it.
 
-If you have any questions or comments, we'd love to hear from you! Feel free to email me at <a href="mailto:ishang@berkeley.edu">ishang@berkeley.edu</a>.
+If you have any questions or comments, you can reach me at <a href="mailto:ishang@berkeley.edu">ishang@berkeley.edu</a>.
 
 ## Resources
+{% assign proteinguide = collections.paper | where_exp: 'item', 'item.data.slug == "proteinguide"' | first %}
 
 1. <a href="./ddm-and-pg-intuition/">Intuitive Introduction to ProteinGuide</a>
-2. <a href="https://arxiv.org/abs/2505.04823">ProteinGuide Paper</a>
+2. <a href="{{ proteinguide.data.paper_link }}">ProteinGuide Paper</a>
 3. <a href="./proteinguide-in-practice/">Using ProteinGuide in Practice</a>
 4. <a href="https://ishan-gaur.github.io/proteingen/workflows/protein-guide/">ProteinGuide Python Workflow on ProteinGen</a>{% sidenote "A rough version is available, but this post is under active development." %}
 

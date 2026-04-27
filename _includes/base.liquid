@@ -17,9 +17,11 @@
 </head>
 <body>
     <nav class="site-nav">
-        <a href="/">Home</a>
-        <a href="/bookshelf/">Bookshelf</a>
-        <a href="/writing/">Writing</a>
+        <a href="/" class="{% if page.url == '/' %}active{% endif %}">Home</a>
+        <a href="/bookshelf/" class="{% if page.url contains '/bookshelf/' %}active{% endif %}">Bookshelf</a>
+        <a href="/writing/" class="{% if page.url contains '/writing/' %}active{% endif %}">Writing</a>
+        <a href="/proteinguide/" class="{% if page.url contains '/using-proteinguide' or page.url == '/proteinguide/' %}active{% endif %}">ProteinGuide</a>
+        <a href="https://ishan-gaur.github.io/proteingen/">ProteinGen</a>
     </nav>
     <main>
         <article>{{ content }}</article>

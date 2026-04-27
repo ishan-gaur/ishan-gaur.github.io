@@ -532,3 +532,9 @@ nav.site-nav a:hover {
    text-decoration: underline;
    text-underline-offset: 0.15em;
 }
+
+nav.site-nav a.active {
+   color: #8B1A1A;
+   text-decoration: underline;
+   text-underline-offset: 0.15em;
+}
