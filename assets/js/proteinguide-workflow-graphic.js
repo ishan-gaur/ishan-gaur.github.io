@@ -63,7 +63,7 @@ function renderGraphic(container) {
     width,
     height,
     role: "img",
-    "aria-label": "Grid of sequence nodes split diagonally from lower-left to upper-right. The upper-left triangle shows realistic proteins with orange checks or gray x marks. The lower-right triangle shows task-solving proteins with blue checks or gray x marks. A red outlined region marks the sampled neighborhood.",
+    "aria-label": "Grid of sequence nodes split diagonally from lower-left to upper-right. The upper-left triangle shows realistic proteins with blue checks or gray x marks. The lower-right triangle shows task-solving proteins with orange checks or gray x marks. A red outlined region marks the sampled neighborhood.",
     style: "width: 100%; height: auto; display: block;",
   });
 
@@ -174,13 +174,13 @@ function renderGraphic(container) {
       const lowerRightMark = { x: x + boxWidth * 0.68, y: y + boxHeight * 0.68 };
 
       if (isOrange) {
-        drawCheck(boxes, upperLeftMark.x, upperLeftMark.y, 2.9, "#ea8c2f");
+        drawCheck(boxes, upperLeftMark.x, upperLeftMark.y, 3.1, "#2f6fd8");
       } else {
         drawX(boxes, upperLeftMark.x, upperLeftMark.y, 2.8, "#cfd5dd");
       }
 
       if (isBlue) {
-        drawCheck(boxes, lowerRightMark.x, lowerRightMark.y, 3.1, "#2f6fd8");
+        drawCheck(boxes, lowerRightMark.x, lowerRightMark.y, 2.9, "#ea8c2f");
       } else {
         drawX(boxes, lowerRightMark.x, lowerRightMark.y, 2.8, "#cfd5dd");
       }
@@ -192,8 +192,8 @@ function renderGraphic(container) {
     const row = Math.round(region.y0 + 0.52 * (region.y1 - region.y0));
     const x = cellX(col);
     const y = cellY(row);
-    drawCheck(boxes, x + boxWidth * 0.32, y + boxHeight * 0.32, 2.9, "#ea8c2f");
-    drawCheck(boxes, x + boxWidth * 0.68, y + boxHeight * 0.68, 3.1, "#2f6fd8");
+    drawCheck(boxes, x + boxWidth * 0.32, y + boxHeight * 0.32, 3.1, "#2f6fd8");
+    drawCheck(boxes, x + boxWidth * 0.68, y + boxHeight * 0.68, 2.9, "#ea8c2f");
   }
 
   svg.appendChild(boxes);

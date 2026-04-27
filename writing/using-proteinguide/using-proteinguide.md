@@ -33,8 +33,8 @@ Although ProteinGuide is theoretically sound, its performance can be contingent 
 2. the {% color "darkorange" %}predictive model{% endcolor %} sufficiently captures the remaining factors that determine your protein's fitness.
 
 These two assumptions can be restated as:
-1. the generative model must capture your {% color "blue" %}prior beliefs{% endcolor %} about which sequences make sense for this task
-2. the predictive model must accurately determine, based on your {% color "darkorange" %}wet-lab data{% endcolor %}, which sequences from your {% color "blue" %}prior{% endcolor %} are most desireable.
+1. the {% color "blue" %}generative model{% endcolor %} must capture your {% color "blue" %}prior beliefs{% endcolor %} about which sequences make sense for this task
+2. the {% color "darkorange" %}predictive model{% endcolor %} must accurately determine, based on your {% color "darkorange" %}wet-lab data{% endcolor %}, which sequences from your prior are most desrreable..
 
 In <a href="./proteinguide-in-practice/">Using ProteinGuide in Practice</a>, we discuss how to evaluate these assumptions and make ProteinGuide work for your specific use-case. 
 
