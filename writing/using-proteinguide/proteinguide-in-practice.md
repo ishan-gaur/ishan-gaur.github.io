@@ -17,7 +17,7 @@ What follows is a living document recording the Listgarten lab's current best pr
 - [Understanding ProteinGuide and its Vulnerabilities](#understanding-proteinguide-and-its-vulnerabilities)
 - [Scenario 1: No wet-lab data yet](#scenario-1-no-wet-lab-data-yet)
 - [Scenario 2: Wet-lab data collected without the pretrained generative model](#scenario-2-wet-lab-data-collected-without-the-pretrained-generative-model)
-- [A Potpurri of Possible Problems](#a-potpurri-of-possible-problems)
+- [Common Problems](#common-problems)
   - ["Reward Hacking"](#reward-hacking)
   - [Library-Generative Model Mismatch](#library-generative-model-mismatch)
   - [Predictive Models on Masked Sequences Can Be Very Biased](#predictive-models-on-masked-sequences-can-be-very-biased)
@@ -89,7 +89,7 @@ The only downside is that a simple baseline for generating the initial library, 
 
 On the other hand, If you already have some data collected, don't worry, that's what the rest of this guide is for. We'll walk you through how to reason about setting up ProteinGuide to work for your use-case. The section on [Library-Generative Model Mismatch](#library-generative-model-mismatch) will be particularly relevant.
 
-## A Potpurri of Possible Problems
+## Common Problems
 
 ### "Reward Hacking"
 In this scenario, the predictive model does not know about some sequence bias in your dataset that is a necessary precondition for success. This commonly includes bias to the wild-type sequence. The predictive model might not know that sequences in other protein families cannot solve your task. We can see this in the schematic as the presence of false positives outside the dashed red line.
