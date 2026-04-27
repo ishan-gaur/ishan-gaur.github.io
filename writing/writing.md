@@ -1,6 +1,6 @@
 ---
 title: Writing
-layout: base.liquid
+layout: writing.liquid
 ---
 ## By Topic
 

@@ -1,6 +1,6 @@
 ---
 title: Archival ML
-layout: base.liquid
+layout: writing.liquid
 ---
 
 <section>

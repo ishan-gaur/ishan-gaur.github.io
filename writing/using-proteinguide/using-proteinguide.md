@@ -1,6 +1,6 @@
 ---
 title: Using ProteinGuide
-layout: base.liquid
+layout: writing.liquid
 ---
 
 <section>
