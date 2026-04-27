@@ -26,7 +26,7 @@ I spent part of my gap year at [Aviv Regev](https://www.gene.com/scientists/our-
 
 ## What's New?
 
-- [2/23] Released [DFM](https://github.com/ishan-gaur/dfm): a small library providing a uniform interface for MLMs, DDMs, DFMs, AO-ARMs, and even AR models. It facilitates plug-and-play experimentation with new sampling, conditioning, and finetuning methods.
+- [4/27] Announced [ProteinGen](https://ishan-gaur.github.io/proteingen/)'s private beta during Jenn's talk at the Broad. ProteinGen is a package for library design with machine learning. It focuses on leveraging assay-labeled data to improve libraries sampled using protein sequence models. It makes it super easy to try the latest library design techniques with any of the most common sequences generative models. (*We even give you a dead-simple interface for using ProteinMPNN!*)
 - [2/23] Bear Xiong and I give a talk on [ProteinGuide](https://arxiv.org/abs/2505.04823b) at [Profluent](https://www.profluent.bio/)
 
 </section>
