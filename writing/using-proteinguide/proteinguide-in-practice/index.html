@@ -28,7 +28,7 @@
 <h1>ProteinGuide in Practice</h1>
 
 <section>
-<p>This post assumes some basic familiarity with generative models, training regression models, Bayes' rule, and ProteinGuide itself <label for="sn-44" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-44" class="margin-toggle"><span class="sidenote">For a brief introduction, checkout my <a href="../ddm-and-pg-intuition/">Intuitive Introduction to ProteinGuide</a>.</span>. It is intended for those with some background in machine learning who are interested in applying ProteinGuide in their research.</p>
+<p>This post assumes some basic familiarity with generative models, training regression models, Bayes' rule, and ProteinGuide itself <label for="sn-44" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-44" class="margin-toggle"><span class="sidenote">For a brief introduction, check out my <a href="../ddm-and-pg-intuition/">Intuitive Introduction to ProteinGuide</a>.</span>. It is intended for those with some background in machine learning who are interested in applying ProteinGuide in their research.</p>
 <p><label for="mn-13" class="margin-toggle"></label><input type="checkbox" id="mn-13" class="margin-toggle"><span class="marginnote">If you're interested in generative modeling, I post pieces that synthesize my learnings about this field <a href="https://substack.com/@ishangaurr">on my substack</a>. Two upcoming essays that I'm particularly excited about will investigate the origins of the probabilistic framework for generative modeling. I'll not only trace through the history of generative models in machine learning (Diffusion, GPT, GANs, VAEs, Deep Belief Networks, etc.) but will also examine the intellectual precursors of the field, including topics like the invention of Monte Carlo methods to create the atomic bomb and the invention of Markov chains to analyze Russian literature. <a href="https://substack.com/@ishangaurr/subscribe">Subscribe to my substack</a> to get notified when these pieces come out.</span></p>
 <p>What follows is a living document recording the Listgarten lab's current best practices for using ProteinGuide. The post is divided into three sections. The first section describes a conceptual framework for how ProteinGuide works in the ideal case. The second uses this framework to categorize the main failure modes you might encounter. It then covers how to address them. The final section organizes these ideas into a reasonable default workflow for using ProteinGuide in the lab</p>
 <h2>Table of Contents</h2>
@@ -46,6 +46,7 @@
 </ul>
 </li>
 <li><a href="#a-practical-workflow-for-proteinguide">A Practical Workflow for ProteinGuide</a></li>
+<li><a href="#glossary">Glossary</a></li>
 </ul>
 <h2>Understanding ProteinGuide and its Vulnerabilities</h2>
 <p>ProteinGuide samples from a function-conditioned distribution over proteins using classifier guidance. The key equation to remember is the following application of Bayes' rule:<br></p>
@@ -53,7 +54,7 @@
 <p>In this equation,</p>
 <ul>
 <li>$p(x)$ is your <span style="color:blue">prior distribution over sequences</span><label for="sn-45" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-45" class="margin-toggle"><span class="sidenote">Strictly speaking the generative model predicts the marginal probability of the next position to unmask $x_i$ given a partially masked sequence $x^{(t)}$, but we'll use $x$ as shorthand for this post.</span> for the task. In ProteinGuide, this is instantiated as a pretrained <span style="color:blue">sequence generative model</span>.</li>
-<li>$p(y \mid x)$ is your <span style="color:darkorange">predictive model</span> of protein function. It estimates the probability<label for="sn-46" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-46" class="margin-toggle"><span class="sidenote">When your function of interest is a discerete variable, like a binary label for whether a sequence adopts a particular fold, the notation to the left suffices. In those cases, the predictive model will be a classifier. When the function of interest is a continuous variable, such as binding affinity, $p(y \mid x)$ is shorthand for $p(y &gt; \tau \mid x)$, where $\tau$ is the threshold for function that you want to achieve with your library. When $y$ is continuous, the predictive model is a regression model and is normally setup to parameterize an tractable distribution over function values (e.g. predicting the mean and variance of a Gaussian). The threshold $\tau$ can then be applied later, when actually sampling, to get a probability.</span> that a sequence $x$ can acheive your function of interest $y$.</li>
+<li>$p(y \mid x)$ is your <span style="color:darkorange">predictive model</span> of protein function. It estimates the probability<label for="sn-46" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-46" class="margin-toggle"><span class="sidenote">When your function of interest is a discrete variable, like a binary label for whether a sequence adopts a particular fold, the notation to the left suffices. In those cases, the predictive model will be a classifier. When the function of interest is a continuous variable, such as binding affinity, $p(y \mid x)$ is shorthand for $p(y &gt; \tau \mid x)$, where $\tau$ is the threshold for function that you want to achieve with your library. When $y$ is continuous, the predictive model is a regression model and is normally set up to parameterize a tractable distribution over function values (e.g. predicting the mean and variance of a Gaussian). The threshold $\tau$ can then be applied later, when actually sampling, to get a probability.</span> that a sequence $x$ can achieve your function of interest $y$.</li>
 <li>$p(x \mid y)$ is what we actually want to sample from: plausible sequences that solve the task.</li>
 </ul>
 <p>For more background on ProteinGuide, check out the <a href="../../using-proteinguide/index.html#overview">overview</a> on the homepage of this series of posts.</p>
@@ -73,28 +74,28 @@
 <p>These assumptions are the same ones we discussed in the <a href="">overview</a> to this series of posts:</p>
 <ol>
 <li>the <span style="color:blue">generative model</span> must capture your <span style="color:blue">prior beliefs</span> about which sequences make sense for this task</li>
-<li>the <span style="color:darkorange">predictive model</span> must accurately determine, based on your <span style="color:darkorange">wet-lab data</span>, which sequences from your prior are most desireable.</li>
+<li>the <span style="color:darkorange">predictive model</span> must accurately determine, based on your <span style="color:darkorange">wet-lab data</span>, which sequences from your prior are most desirable.</li>
 </ol>
 <p>In our experience, every time we thought we found a &quot;new&quot; failure mode for ProteinGuide, it turned out to stem from a violation of one or both of these assumptions:</p>
 <ol>
 <li>the way your generative model is set up, it doesn't actually capture all your prior knowledge about the task, often producing sequences that are clearly suboptimal for your task of interest, or</li>
 <li>the sequences produced by the generative model are out of distribution for the predictive model; equivalently, the generative model produces sequences that are very different from those in your assay labeled data.</li>
 </ol>
-<p>The remainder of this post covers tips and tricks to mitigate these issues. To begin, there are two possible scenarios we must analyse.</p>
+<p>The remainder of this post covers tips and tricks to mitigate these issues. To begin, there are two possible scenarios we must analyze.</p>
 <h2>Scenario 1: No wet-lab data yet</h2>
-<p>If you haven't run your first experimental library yet, congratulations! You can avoid these problems pretty safely<label for="sn-47" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-47" class="margin-toggle"><span class="sidenote">Click <a href="">here</a> to jump to our workflow that includes running the first library.</span>. Just generate the sequences for your first library using the generative model. The main thing you need to get right is to setup the sampling problem to bake-in as much of your prior knowledge about the task as possible. Don't just use the unconditional generative model directly. Play with:</p>
+<p>If you haven't run your first experimental library yet, congratulations! You can avoid these problems pretty safely<label for="sn-47" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-47" class="margin-toggle"><span class="sidenote">Click <a href="">here</a> to jump to our workflow that includes running the first library.</span>. Just generate the sequences for your first library using the generative model. The main thing you need to get right is to set up the sampling problem to bake-in as much of your prior knowledge about the task as possible. Don't just use the unconditional generative model directly. Play with:</p>
 <ul>
 <li>picking a specific region of the protein to design</li>
 <li>biasing the generative model towards wildtype sequences</li>
-<li>filtering the generations with plddt or refolding metrics</li>
+<li>filtering the generations with pLDDT or refolding metrics</li>
 <li>you can even <a href="https://ishan-gaur.github.io/proteingen/examples/stability-guided-generation/">guide with the stability predictor</a> from our paper.</li>
 </ul>
 <p>Then, to sample the second round of designs, set up the generation pipeline the <strong>same</strong> way. Just take care to plug in the guided model wherever you used the pretrained model the first time around<label for="sn-48" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-48" class="margin-toggle"><span class="sidenote">If you use the ProteinGen package, this just corresponds to, e.g. changing wherever you have <code>ESM3</code> in your code to <code>DEG(ESM3, predictive_model)</code>.</span>.</p>
-<p>The only caveat is that, if you filter generated sequences–such as selecting generated sequences for the library by pLDDT–you may need to finetune the generative model on the library sequences first. Otherwise the generative process will be OOD for the predictive model, since it will be no longer be biased towards high plddt sequences like the library was.</p>
-<p>The benefit of setting up your first library this way is that the sequences in it will be sampled from the distribution of your generative model. Recall from the <a href="./ddm-and-pg-intuition.md">Intuitive Introduction to ProteinGuide</a> that the predictive model has to approximately forcast how the <em>particular generative model</em> it is guiding will complete the current partially masked sequence and what distribution over function values that will induce. Making the predictive model's data distribution match the generative model sequences it will take as input during guidance will make ProteinGuide much more likely to work for you.</p>
+<p>The only caveat is that, if you filter generated sequences–such as selecting generated sequences for the library by pLDDT–you may need to finetune the generative model on the library sequences first. Otherwise the generative process will be OOD for the predictive model, since it will no longer be biased towards high pLDDT sequences like the library was.</p>
+<p>The benefit of setting up your first library this way is that the sequences in it will be sampled from the distribution of your generative model. Recall from the <a href="../ddm-and-pg-intuition/">Intuitive Introduction to ProteinGuide</a> that the predictive model has to approximately forecast how the <em>particular generative model</em> it is guiding will complete the current partially masked sequence and what distribution over function values that will induce. Making the predictive model's data distribution match the generative model sequences it will take as input during guidance will make ProteinGuide much more likely to work for you.</p>
 <p>The only downside is that a simple baseline for generating the initial library, like a DMS scan of the WT, might still outperform the generative model on average. This means even if ProteinGuide works, it is starting from a disadvantage compared to wildtype. We don't have a ton of anecdotal evidence on this question yet, but if you have the budget for multiple rounds of design, ProteinGuide starting with the generative model sequences should be fine. If you have a more limited budget, we would recommend first finetuning the generative model on the WT or successful sequences from a pilot mutational library before using it to generate your first library.</p>
 <h2>Scenario 2: Wet-lab data collected without the pretrained generative model</h2>
-<p>On the other hand, If you already have some data collected, don't worry, that's what the rest of this guide is for. We'll walk you through how to reason about setting up ProteinGuide to work for your use-case. The section on <a href="#library-generative-model-mismatch">Library-Generative Model Mismatch</a> will be particularly relevant.</p>
+<p>On the other hand, if you already have some data collected, don't worry, that's what the rest of this guide is for. We'll walk you through how to reason about setting up ProteinGuide to work for your use-case. The section on <a href="#library-generative-model-mismatch">Library-Generative Model Mismatch</a> will be particularly relevant.</p>
 <h2>Common Problems</h2>
 <h3>&quot;Reward Hacking&quot;</h3>
 <p>In this scenario, the predictive model does not know about some sequence bias in your dataset that is a necessary precondition for success. This commonly includes bias to the wild-type sequence. The predictive model might not know that sequences in other protein families cannot solve your task. We can see this in the schematic as the presence of false positives outside the dashed red line.</p>
@@ -114,9 +115,9 @@
 </ul>
 <p>Common gotchas:</p>
 <ul>
-<li>If you're too aggressive with these techniques guidance might not do anything because the sequences from the generative model no longer covers a large enough range of function for the predictive model to guide towards the good ones. You can always try to increase guidance temperature to solve this, but we've found that it's better to give the model more residues to design or increase regularization towards the original weights when doing finetuning (<em>i.e.</em>, using a lower LoRA rank).</li>
+<li>If you're too aggressive with these techniques guidance might not do anything because the sequences from the generative model no longer cover a large enough range of function for the predictive model to guide towards the good ones. You can always try to increase guidance temperature to solve this, but we've found that it's better to give the model more residues to design or increase regularization towards the original weights when doing finetuning (<em>i.e.</em>, using a lower LoRA rank).</li>
 <li>If you finetune on homologs that are in-distribution for the model, the model is unlikely to change how it ranks them. It will just make your protein family of interest more likely than all other protein families. This is sufficient to address reward hacking, but is just a common assumption people have when they train on homologs–that the model will now learn new fitness information as well. We have not found the latter to be a reliable phenomenon.</li>
-<li>If you train on the initial library, there is a chance that the pretrained model overfits and forgets information it knows about the natural distribution of sequences. To guard against this, use a low LoRA rank and monitor the model's performance on a held-out set of natural sequences. This is related to the first problem above of have to little variance in the generative model's sequences.</li>
+<li>If you train on the initial library, there is a chance that the pretrained model overfits and forgets information it knows about the natural distribution of sequences. To guard against this, use a low LoRA rank and monitor the model's performance on a held-out set of natural sequences. This is related to the first problem above of having too little variance in the generative model's sequences.</li>
 </ul>
 <h3>Library-Generative Model Mismatch</h3>
 <p>In this scenario, your first experimental library was not created by the generative model. Consequently, there is a mismatch between the predictive model's training distribution and the sequences the generative model will actually create. Similarly, the guided sequences might end up being too different from your training data.</p>
@@ -126,7 +127,7 @@
 </figure>
 <p>Solutions:</p>
 <ul>
-<li>Employ some form of uncertainty quantification while figuring out the best approach. We've found that predicting per-sample variance and creating an ensemble of these predictors trained on different subsets of the data is helpful for quantifying your aleatoric and epistemic uncertainty. Train on replicate data directly if possible.</li>
+<li>Employ some form of uncertainty quantification while figuring out the best approach. We've found that predicting per-sample variance and creating an ensemble of these predictors trained on different subsets of the data is helpful for quantifying your <a href="https://en.wikipedia.org/wiki/Uncertainty_quantification#Aleatoric_and_epistemic_uncertainty">aleatoric</a> and <a href="https://en.wikipedia.org/wiki/Uncertainty_quantification#Aleatoric_and_epistemic_uncertainty">epistemic</a> uncertainty. Train on replicate data directly if possible.</li>
 <li>Finetune the generative model on the successful sequences from the first library, provided that the best sequences in that initial library are actually good enough to build on top of. Check that samples from this model now have lower uncertainty and higher fitness under the predictive model.</li>
 <li>Guide the pretrained model as is, but make sure to bring its sequences in-distribution for the noisy predictor. This can be accomplished by self-distillation of the predictive model on partially masked sequences from your generative model. In this setup, the predictive model will learn to predict the labels it gave the unmasked sequences using the masked inputs. If you've created an ensemble to get uncertainty estimates, sample several labels for the predictive model to train on.</li>
 </ul>
@@ -152,7 +153,7 @@
 <ol>
 <li>If possible, generate your first library using the pretrained generative model. Otherwise finetune the model on a subset of good sequences from your first library.</li>
 <li>In either case, make sure to bake in as much of your prior knowledge about the task as possible into the generative model. This includes inverse folding and filtering with AlphaFold whenever possible.</li>
-<li>Try several predictive model architectures by training them on just the unmasked sequences. At this point just focus on the basic prediction task, no uncertainty quantification. IMPORTANT: until step 8, always train two sets of predictive models, an oracle that sees all the data, and a regular model which doesn't see the test split.</li>
+<li>Try several predictive model architectures by training them on just the unmasked sequences. At this point just focus on the basic prediction task, no uncertainty quantification. IMPORTANT: until step 8, always train two sets of predictive models, an <a href="#glossary-oracle">oracle</a> that sees all the data, and a regular model which doesn't see the test split.</li>
 <li>Using the best one, introduce uncertainty quantification.
 <ul>
 <li>Create an ensemble of mean predictors using random train-splits from your first library.</li>
@@ -161,11 +162,22 @@
 </ul>
 </li>
 <li>Train a predictive model for masked sequences, being careful to avoid collapse of the mean predictions.</li>
-<li>Guide with DEG if your predictive model is lightweight or non-differentiable. Otherwise, try TAG.</li>
-<li>Sweep temperature parameters and target property thresholds to find a set of parameters that has the highest probability of success under your oracle.</li>
+<li>Guide with <a href="#glossary-deg">DEG</a> if your predictive model is lightweight or non-differentiable. Otherwise, try <a href="#glossary-tag">TAG</a>.</li>
+<li>Sweep temperature parameters and target property thresholds to find a set of parameters that has the highest probability of success under your <a href="#glossary-oracle">oracle</a>.</li>
 <li>Guide with the best set of parameters!</li>
 </ol>
+<h2 id="glossary">Glossary</h2>
+<h3 id="glossary-oracle">Oracle</h3>
+<p>An oracle predictor is a predictive model trained on all available labeled data (including what would normally be held out for evaluation), and which typically cannot make predictions for partially masked sequences. It is our <em>in silico</em> gold standard for modeling the relevant sequence-function relationship. We use it for in-silico ranking and calibration checks, not for reporting generalization.</p>
+<p>To implement an oracle using the <a href="https://ishangaur.com/proteingen">ProteinGen</a> package, see the <a href="https://ishangaur.com/proteingen/workflows/training-predictors/#training-the-oracle">Training the oracle</a> section of the <a href="https://ishangaur.com/proteingen/workflows/training-predictors/">Predictor Training Guide</a>.</p>
+<h3 id="glossary-deg">DEG</h3>
+<p>DEG is the exact classifier-guidance method for any-order discrete generative models described in our paper. Algorithmically, it specifies one site to unmask next, uses the predictive model to evaluate $p(y\mid\tilde{x})$ for each candidate mutant $\tilde{x}$, and combines these with pretrained generative-model predictions via Bayes' rule. For formal details and notation, see the <a href="https://arxiv.org/abs/2505.04823">ProteinGuide paper</a>.</p>
+<p>To use DEG for conditional generation using the <a href="https://ishangaur.com/proteingen">ProteinGen</a> package, see the <a href="https://ishangaur.com/proteingen/workflows/protein-guide/#step-4-combine-with-tag-or-deg">Step 4: Combine with TAG or DEG</a> section of the <a href="https://ishangaur.com/proteingen/workflows/protein-guide/">ProteinGuide Workflow</a>.</p>
+<h3 id="glossary-tag">TAG</h3>
+<p>TAG is an approximate classifier-guidance method that uses the predictive model's gradient on a one-hot input to approximate the Bayes-rule likelihood ratio. Compared to DEG, TAG often trades exactness for lower latency, but can be less stable because it is approximate. For formal details and notation, see the <a href="https://arxiv.org/abs/2505.04823">ProteinGuide paper</a>.</p>
+<p>To use TAG for conditional generation using the <a href="https://ishangaur.com/proteingen">ProteinGen</a> package, see the <a href="https://ishangaur.com/proteingen/workflows/protein-guide/#step-4-combine-with-tag-or-deg">Step 4: Combine with TAG or DEG</a> section of the <a href="https://ishangaur.com/proteingen/workflows/protein-guide/">ProteinGuide Workflow</a>.</p>
 </section>
+
 
 <footer class="writing-footer">
   <p>Comments? Questions? Feel free to reach out at <a href="mailto:ishang@berkeley.edu?subject=ProteinGuide+in+Practice">ishang@berkeley.edu</a>.</p>

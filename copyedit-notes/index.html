@@ -1,0 +1,267 @@
+<h1>Copy-editing Notes (2026-04-27)</h1>
+<p>Scope reviewed so far:</p>
+<ul>
+<li><code>index.md</code></li>
+<li><code>writing/writing.md</code></li>
+<li><code>writing/using-proteinguide/using-proteinguide.md</code></li>
+<li><code>writing/using-proteinguide/ddm-and-pg-intuition.md</code></li>
+<li><code>writing/using-proteinguide/proteinguide-in-practice.md</code></li>
+<li><code>writing/archival-ml/archival-ml.md</code></li>
+<li><code>writing/using-proteinguide/proteinguide-in-practice-draft.md</code></li>
+<li><code>writing/using-proteinguide/_theory.md</code></li>
+<li><code>writing/using-proteinguide/_reality-check.md</code></li>
+</ul>
+<p>I also built the site and checked rendered links/resources for these pages.</p>
+<h2>Progress update after your comments</h2>
+<h3>Top next priority (deferred, per your note)</h3>
+<ul>
+<li>Fix Substack subscribe URL (<code>https://substack.com/@ishangaurr/subscribe</code>, currently 404).</li>
+</ul>
+<h3>Applied edits</h3>
+<ul>
+<li>✅ Implemented all &quot;Go ahead&quot; typo/grammar/link fixes in:
+<ul>
+<li><code>index.md</code></li>
+<li><code>writing/using-proteinguide/using-proteinguide.md</code></li>
+<li><code>writing/using-proteinguide/ddm-and-pg-intuition.md</code></li>
+<li><code>writing/using-proteinguide/proteinguide-in-practice.md</code></li>
+</ul>
+</li>
+<li>✅ Added placeholder margin/sidenote definitions for:
+<ul>
+<li><strong>oracle</strong> (defined now)</li>
+<li><strong>DEG</strong> and <strong>TAG</strong> (TODO placeholders pointing to the ProteinGuide paper, for you to fill in)</li>
+</ul>
+</li>
+<li>✅ Linked <strong>aleatoric</strong> and <strong>epistemic</strong> uncertainty terms to Wikipedia.</li>
+<li>✅ Standardized <code>pLDDT</code> casing in <code>proteinguide-in-practice.md</code>.</li>
+<li>✅ Verified that the updated <code>../ddm-and-pg-intuition/</code> link resolves in the built website.</li>
+</ul>
+<h3>Pending decisions from you</h3>
+<ul>
+<li><code>writing/using-proteinguide/proteinguide-in-practice.md</code>
+<ul>
+<li><code>[overview]()</code> target is still empty.</li>
+<li><code>[here]()</code> target in the sidenote is still empty.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>1) <code>index.md</code></h2>
+<h3>Typos / grammar</h3>
+<ul>
+<li>“I studies computer systems” → <strong>“I studied computer systems.”</strong> <strong>Go ahead</strong></li>
+<li>News item tense is inconsistent:
+<ul>
+<li>“Bear Xiong and I <strong>give</strong> a talk…” → likely <strong>“gave”</strong> (to match dated past events). <strong>Go ahead</strong></li>
+</ul>
+</li>
+</ul>
+<h3>Consistency / semantics</h3>
+<ul>
+<li>Contact email appears as <code>ishang@berkley.edu</code> here, but elsewhere the site uses <code>ishang@berkeley.edu</code>. <strong>The latter is correct.</strong></li>
+</ul>
+<h3>Link/resource checks</h3>
+<ul>
+<li>Email link is malformed:
+<ul>
+<li>Current: <code>&lt;a href='ishang@berkley.edu'&gt;Email&lt;/a&gt;</code></li>
+<li>Should be mailto form, e.g. <code>href='mailto:ishang@berkeley.edu'</code>. <strong>Go ahead</strong></li>
+</ul>
+</li>
+<li>On rendered homepage research cards, this external link returns 404: <strong>ignore--it's private for now</strong>
+<ul>
+<li><code>https://github.com/junhaobearxiong/protein_discrete_guidance</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>2) <code>writing/writing.md</code></h2>
+<h3>Typos / grammar</h3>
+<ul>
+<li>No obvious grammar/typo issues found.</li>
+</ul>
+<h3>Link/resource checks</h3>
+<ul>
+<li>Topic links resolve:
+<ul>
+<li><code>./archival-ml/</code></li>
+<li><code>./using-proteinguide/</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>3) <code>writing/using-proteinguide/using-proteinguide.md</code></h2>
+<h3>Typos / grammar</h3>
+<ul>
+<li>“go beyond <strong>specifiying</strong> a static structure” → <strong>specifying</strong>. <strong>Go ahead</strong></li>
+<li>“most <strong>desrreable..</strong>” → <strong>desirable.</strong> <strong>Go ahead</strong></li>
+<li>“<strong>its</strong> useful to be able to test…” → <strong>it’s</strong> useful. <strong>Go ahead</strong></li>
+<li>“wetlab budget” → consider <strong>wet-lab budget</strong> (used elsewhere on the site). <strong>Go ahead</strong></li>
+</ul>
+<h3>Markup / structural issues</h3>
+<ul>
+<li>Stray closing tag in sentence:
+<ul>
+<li><code>The &lt;a ...&gt;Intuitive Introduction...&lt;/a&gt;&lt;/li&gt; and ...</code></li>
+<li>Remove the extra <code>&lt;/li&gt;</code>. <strong>Go ahead</strong></li>
+</ul>
+</li>
+</ul>
+<h3>Readability / terminology</h3>
+<ul>
+<li>“DPLM” appears without expansion/definition (may be opaque to some readers). <strong>ignore</strong></li>
+</ul>
+<h3>Link/resource checks</h3>
+<ul>
+<li>Internal links on this page resolve.</li>
+<li>“A rough version is available, but this post is under active development.” (ProteinGen workflow sidenote) may be stale language; linked page exists and appears live. <strong>ignore</strong></li>
+</ul>
+<hr>
+<h2>4) <code>writing/using-proteinguide/ddm-and-pg-intuition.md</code></h2>
+<h3>Typos / grammar</h3>
+<ul>
+<li>“trained to all real proteins with equal probability” → likely “trained to <strong>assign</strong> all real proteins equal probability.” <strong>Go ahead</strong></li>
+<li>“this <strong>idea</strong> model” → <strong>ideal</strong> model. <strong>Go ahead</strong></li>
+<li>“having to <strong>training</strong> a genuine conditional…” → <strong>train</strong>. <strong>Go ahead</strong></li>
+<li>“generative model’s <strong>probabilty</strong>” → <strong>probability</strong>. <strong>Go ahead</strong></li>
+<li>“solving <strong>a some</strong> counting problem” → remove one article.  <strong>resolved</strong></li>
+<li>“<strong>everytime</strong> you sample…” → <strong>every time</strong>. <strong>Go ahead</strong></li>
+<li>“Then <strong>setup</strong> the predictive model training…” → <strong>set up</strong> (verb form). <strong>Go ahead</strong></li>
+</ul>
+<h3>Consistency / semantics</h3>
+<ul>
+<li>Section heading says “### Training the Predictive Model (<strong>coming soon</strong>)” but the section already contains substantial content. This reads as outdated. <strong>Yes, delete the &quot;coming soon&quot; text.</strong></li>
+</ul>
+<h3>Readability</h3>
+<ul>
+<li>Acronyms/terms like <strong>WLOG</strong> and <strong>ELBO</strong> may need one-line definitions for broader readability. <strong>ignore, the sidenotes/marginnotes can be technical without exposition</strong></li>
+</ul>
+<h3>Link/resource checks</h3>
+<ul>
+<li>Internal media and page links resolve in rendered output.</li>
+</ul>
+<hr>
+<h2>5) <code>writing/using-proteinguide/proteinguide-in-practice.md</code></h2>
+<h3>Typos / grammar <strong>Go ahead on all of these</strong></h3>
+<ul>
+<li>“<strong>checkout</strong> my…” → <strong>check out</strong>.</li>
+<li>“function of interest is a <strong>discerete</strong> variable” → <strong>discrete</strong>.</li>
+<li>“parameterize <strong>an tractable</strong> distribution” → <strong>a tractable</strong>.</li>
+<li>“can <strong>acheive</strong> your function” → <strong>achieve</strong>.</li>
+<li>“most <strong>desireable</strong>” → <strong>desirable</strong>.</li>
+<li>“must <strong>analyse</strong>” (if using US spelling elsewhere) → <strong>analyze</strong>.</li>
+<li>“approximately <strong>forcast</strong>” → <strong>forecast</strong>.</li>
+<li>“On the other hand, <strong>If</strong> you already…” → lowercase <strong>if</strong>.</li>
+<li>“will be no longer be biased…” → remove extra “be” (e.g., “will no longer be biased…”).</li>
+<li>“sequences … no longer <strong>covers</strong>” → <strong>cover</strong>.</li>
+<li>“of have <strong>to</strong> little variance” → <strong>too</strong> little variance.</li>
+<li>Multiple uses of “setup” as a verb should be “set up.”</li>
+</ul>
+<h3>Broken/empty links <strong>Walk me through what you want to put in for each of these</strong></h3>
+<ul>
+<li>Empty link target: <code>[overview]()</code></li>
+<li>Empty link target in sidenote: <code>[here]()</code></li>
+<li>Broken relative link in current URL context:
+<ul>
+<li><code>[Intuitive Introduction to ProteinGuide](./ddm-and-pg-intuition.md)</code></li>
+<li>Should be something like <code>../ddm-and-pg-intuition/</code> <strong>go ahead but make sure to test that it resolved in the built website</strong></li>
+</ul>
+</li>
+</ul>
+<h3>Readability / terminology consistency</h3>
+<ul>
+<li>Several terms appear without definitions on first use: <strong>OOD</strong>, <strong>LoRA</strong>, <strong>MSE</strong>, <strong>oracle</strong>, <strong>DEG</strong>, <strong>TAG</strong>, <strong>aleatoric/epistemic</strong>. <strong>don't worry about OOD, MSE, and LoRA. Let's define what the oracle is, and define DEG and TAG in the margins--set those up for me with a link to the ProteinGuide paper for readers to learn more. I'll fill them in, but you need to remind me before you're done. For aleatoric and epistemic, link to wikipedia pages.</strong></li>
+<li><code>pLDDT</code> appears with inconsistent casing (<code>plddt</code> vs <code>pLDDT</code>). <strong>Standardize to <code>pLDDT</code> throughout.</strong></li>
+</ul>
+<h3>External link checks</h3>
+<ul>
+<li>Substack subscribe URL currently returns 404:
+<ul>
+<li><code>https://substack.com/@ishangaurr/subscribe</code>A <strong>Let's ignore for now, but this is a top next priority, move it to the top of the list.</strong></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>6) <code>writing/archival-ml/archival-ml.md</code></h2>
+<h3>Typos / grammar</h3>
+<ul>
+<li>No major hard typos found.</li>
+<li>Optional clarity tweak: “They represent, not just an important idea, but herald…” is grammatical but slightly clunky; could be simplified for flow. <strong>ignore</strong></li>
+</ul>
+<h3>Readability</h3>
+<ul>
+<li>“fecundity” may be harder for some readers; consider a simpler synonym if desired. <strong>ignore</strong></li>
+</ul>
+<h3>Link/resource checks</h3>
+<ul>
+<li>Internal link <code>/index.html</code> exists.</li>
+<li>“Coming Soon!” note for the RBM post appears consistent with repo state (no matching archival post found yet).</li>
+<li>Amazon URL returns HTTP 500 in automated check (could be anti-bot behavior, but worth manually verifying in browser). <strong>ignore</strong></li>
+</ul>
+<hr>
+<h2>7) <code>writing/using-proteinguide/proteinguide-in-practice-draft.md</code></h2>
+<h3>Typos / grammar</h3>
+<ul>
+<li>No major grammar issues found in this draft.</li>
+</ul>
+<h3>Readability / consistency</h3>
+<ul>
+<li>Terminology and structure are generally cleaner than the current non-draft version.</li>
+</ul>
+<h3>Link/resource checks</h3>
+<ul>
+<li>Broken relative link in sidenote:
+<ul>
+<li>Current: <code>[intuitive overview of ProteinGuide](./ddm-and-pg-intuition/)</code></li>
+<li>This resolves under the draft page path and breaks.</li>
+<li>Suggested: <code>../ddm-and-pg-intuition/</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>8) <code>writing/using-proteinguide/_theory.md</code></h2>
+<h3>Typos / grammar</h3>
+<ul>
+<li>Mirrors older text from <code>ddm-and-pg-intuition.md</code> and still has several corrected typos, e.g.:
+<ul>
+<li>“trained to all real proteins …”</li>
+<li>“idea model”</li>
+<li>“multiple the pretrained generative models proabbilities …”</li>
+</ul>
+</li>
+</ul>
+<h3>Link/resource checks</h3>
+<ul>
+<li>Broken media link in rendered output:
+<ul>
+<li><code>esm-sampling-crop.mp4</code> resolves to <code>.../_theory/esm-sampling-crop.mp4</code></li>
+<li>Suggested: <code>../esm-sampling-crop.mp4</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>9) <code>writing/using-proteinguide/_reality-check.md</code></h2>
+<h3>Content status</h3>
+<ul>
+<li>Page currently only has a section title:
+<ul>
+<li><code>## Where the Rubber Meets the Road {#reality}</code></li>
+</ul>
+</li>
+<li>No copy-edit issues beyond this; likely a placeholder/stub.</li>
+</ul>
+<hr>
+<h2>Link-check summary (non-200 results)</h2>
+<p>From the reviewed pages/rendered content:</p>
+<ul>
+<li>404: <code>https://github.com/junhaobearxiong/protein_discrete_guidance</code></li>
+<li>404: <code>https://substack.com/@ishangaurr/subscribe</code></li>
+<li>500: <code>https://www.amazon.com/Structure-Scientific-Revolutions-50th-Anniversary/dp/0226458121?sr=1-1</code> (possibly bot-block behavior)</li>
+<li>403 (likely access/paywall restrictions, not necessarily nonexistent): <strong>ignore, these work for me</strong>
+<ul>
+<li><code>https://dl.acm.org/doi/abs/10.1145/3503222.3507726</code></li>
+<li><code>https://www.annualreviews.org/content/journals/10.1146/annurev-biodatasci-102423-113534</code></li>
+</ul>
+</li>
+</ul>
