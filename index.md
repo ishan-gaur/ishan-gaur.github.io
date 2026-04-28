@@ -13,9 +13,9 @@ Hi, I'm Ishan. {% marginnote "<img src='/assets/ishan.png' alt=''>" %} I'm a sec
 
 <!-- {% sidenote "I am also an <a href='https://peers.eecs.berkeley.edu/'>EECS Peer</a> and help run the <a href='https://bair.berkeley.edu/blog/'>BAIR Blog</a>." %} -->
 
-I spent part of my gap year at [Aviv Regev](https://www.gene.com/scientists/our-scientists/aviv-regev)'s group at Genentech, working on multimodal language models with [Yongju Lee](https://x.com/LeeTaliq). Before that, I was an undergrad at Stanford. During my time there, I studies computer systems, was active in the startup community, and was fortunate to have worked with [Emma Lundberg](https://lundberglab.stanford.edu/) on vision models for mapping dynamic changes in the human proteome. I also had a blast working with new hardware accelerators, with [Kunle Olukotun](https://engineering.stanford.edu/people/oyekunle-olukotun) and [Muhammad Shahbaz](https://gitlab.com/mshahbaz/mshahbaz.gitlab.io/-/wikis/home).
+I spent part of my gap year at [Aviv Regev](https://www.gene.com/scientists/our-scientists/aviv-regev)'s group at Genentech, working on multimodal language models with [Yongju Lee](https://x.com/LeeTaliq). Before that, I was an undergrad at Stanford. During my time there, I studied computer systems, was active in the startup community, and was fortunate to have worked with [Emma Lundberg](https://lundberglab.stanford.edu/) on vision models for mapping dynamic changes in the human proteome. I also had a blast working with new hardware accelerators, with [Kunle Olukotun](https://engineering.stanford.edu/people/oyekunle-olukotun) and [Muhammad Shahbaz](https://gitlab.com/mshahbaz/mshahbaz.gitlab.io/-/wikis/home).
 
-Links:&emsp;<a href='https://x.com/Ishan__Gaur'>Twitter</a>&emsp;<a href='ishang@berkley.edu'>Email</a>&emsp;<a href='https://scholar.google.com/citations?user=PgW-8YIAAAAJ&hl=en'>Scholar</a>&emsp;<a href='https://github.com/ishan-gaur'>GitHub</a>
+Links:&emsp;<a href='https://x.com/Ishan__Gaur'>Twitter</a>&emsp;<a href='mailto:ishang@berkeley.edu'>Email</a>&emsp;<a href='https://scholar.google.com/citations?user=PgW-8YIAAAAJ&hl=en'>Scholar</a>&emsp;<a href='https://github.com/ishan-gaur'>GitHub</a>
 
 </section>
 
@@ -25,7 +25,7 @@ Links:&emsp;<a href='https://x.com/Ishan__Gaur'>Twitter</a>&emsp;<a href='ishang
 
 - [4/27] Released [ProteinGen](https://ishan-gaur.github.io/proteingen/){% sidenote "ProteinGen is a package for leveraging wet-lab data in ML-based library design. It provides a simple interface for conditioning, finetuning, and sampling from all common sequence design models: ESM3, ProteinMPNN, ProGen3, etc. It provides several tools for effectively using coding agents for assembling and testing your library design pipeline." %} during Jenn's talk at the Broad.
 - [4/11] Put out a little [AF3 Fast API server](https://github.com/ishan-gaur/af3-server). It's intended to be used on SLURM machines and shared across users in a lab. That way one machine running one instance of AF3 can be used by everyone.
-- [2/23] Bear Xiong and I give a talk on [ProteinGuide]({{ proteinguide.data.paper_link }}) at [Profluent](https://www.profluent.bio/)
+- [2/23] Bear Xiong and I gave a talk on [ProteinGuide]({{ proteinguide.data.paper_link }}) at [Profluent](https://www.profluent.bio/)
 
 </section>
 

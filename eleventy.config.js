@@ -49,6 +49,32 @@ export default function (eleventyConfig) {
     return `<span style="color:${color}">${content}</span>`;
   });
 
+  eleventyConfig.addFilter("ymdUtc", function (value) {
+    const date = value instanceof Date ? value : new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+    return date.toISOString().slice(0, 10);
+  });
+
+  eleventyConfig.addCollection("writingPosts", function (collectionApi) {
+    return collectionApi
+      .getAll()
+      .filter((post) => {
+        return (
+          post.data.layout === "blog.liquid" &&
+          post.inputPath.includes("/writing/") &&
+          post.inputPath.endsWith(".md") &&
+          !post.inputPath.includes("-draft.md")
+        );
+      })
+      .sort((a, b) => {
+        const aDate = new Date(a.data["date-updated"] || a.date);
+        const bDate = new Date(b.data["date-updated"] || b.date);
+        return bDate - aDate;
+      });
+  });
+
 }
 
 let options = { html: true };
