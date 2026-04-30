@@ -1,0 +1,308 @@
+
+<h2 class="sr-only">Distribution of counts for each data point for each validation set in the ensemble.</h2>
+
+<style>
+  /* Claude light mode CSS variables */
+  :root {
+    --color-text-primary: #1a1916;
+    --color-text-secondary: #6b6a65;
+    --color-text-tertiary: #9b9a95;
+    --color-text-info: #1a5fa8;
+    --color-text-warning: #92500a;
+
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f4f2;
+    --color-background-info: #ddeeff;
+    --color-background-warning: #fef3e2;
+
+    --border-radius-md: 8px;
+    --border-radius-sm: 4px;
+  }
+
+  body {
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 1.5rem;
+    box-sizing: border-box;
+  }
+
+  .ctrl-row { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+  .ctrl-label { font-size: 13px; color: var(--color-text-secondary); min-width: 120px; }
+  .ctrl-val { font-size: 13px; font-weight: 500; min-width: 90px; color: var(--color-text-primary); }
+  .chart-wrap { position: relative; width: 100%; }
+  .stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin: 1rem 0; }
+  .stat { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem 1rem; }
+  .stat-label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .stat-val { font-size: 18px; font-weight: 500; color: var(--color-text-primary); }
+  .section-head { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); margin: 1.25rem 0 0.5rem; letter-spacing: 0.03em; }
+  .legend { display: flex; gap: 20px; margin-bottom: 8px; font-size: 12px; color: var(--color-text-secondary); }
+  .legend span { display: flex; align-items: center; gap: 5px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+  .note { font-size: 11px; color: var(--color-text-tertiary); margin-top: 0.5rem; }
+  .info-badge { display:inline-block; font-size:11px; background:var(--color-background-info); color:var(--color-text-info); border-radius:var(--border-radius-md); padding: 2px 8px; margin-left:6px; }
+  .warn-badge { display:inline-block; font-size:11px; background:var(--color-background-warning); color:var(--color-text-warning); border-radius:var(--border-radius-md); padding: 2px 8px; }
+  button { cursor: pointer; }
+</style>
+
+<div style="padding: 1rem 0 0.5rem;">
+
+  <div class="ctrl-row">
+    <span class="ctrl-label">Num splits (K)</span>
+    <input type="range" id="kSlider" min="2" max="30" value="9" step="1" style="flex:1;">
+    <span class="ctrl-val" id="kVal">9</span>
+  </div>
+
+  <div class="ctrl-row">
+    <span class="ctrl-label">Val fraction</span>
+    <input type="range" id="vSlider" min="2" max="50" value="9" step="1" style="flex:1;">
+    <span class="ctrl-val" id="vVal">1/9 ≈ 11.1%</span>
+  </div>
+
+  <div class="ctrl-row">
+    <span class="ctrl-label">Simulations</span>
+    <input type="range" id="simSlider" min="1" max="50" value="10" step="1" style="flex:1;">
+    <span class="ctrl-val" id="simVal">10</span>
+  </div>
+
+  <div class="ctrl-row" style="gap:8px; margin-bottom:0.5rem;">
+    <button id="rerunBtn">Resample ↺</button>
+    <span class="info-badge" id="configBadge"></span>
+  </div>
+
+  <p class="note" id="sizeNote"></p>
+
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-label">Val size</div><div class="stat-val" id="sValSize">—</div></div>
+    <div class="stat"><div class="stat-label">Train size</div><div class="stat-val" id="sTrainSize">—</div></div>
+    <div class="stat"><div class="stat-label">Config: duplicate rate</div><div class="stat-val" id="sCfgDup">—</div></div>
+    <div class="stat"><div class="stat-label">Random: duplicate rate</div><div class="stat-val" id="sRandDup">—</div></div>
+  </div>
+
+  <div class="section-head">Within-split appearance counts — averaged over K splits × simulations</div>
+  <div class="legend">
+    <span><span class="legend-dot" style="background:rgba(55,138,221,0.75);"></span>Configuration model</span>
+    <span><span class="legend-dot" style="background:rgba(212,83,126,0.55);"></span>Simple random</span>
+  </div>
+  <p class="note">Each (point, split) pair contributes one count. The histogram shows how many such pairs have count 0, 1, 2, … The total number of pairs is N × K per simulation.</p>
+  <div class="chart-wrap" style="height:260px;"><canvas id="chart" role="img" aria-label="Histogram of within-split appearance counts for config model vs simple random splits, showing mostly 0s and 1s"></canvas></div>
+
+  <p class="note" id="dupNote" style="margin-top:0.75rem;"></p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const N = 1890;
+
+function chooseDivisor(den) {
+  const divisors = [];
+  for (let d = 2; d <= 50; d++) if (N % d === 0) divisors.push(d);
+  let best = divisors[0], bestDist = Math.abs(divisors[0] - den);
+  for (const d of divisors) {
+    if (Math.abs(d - den) < bestDist) { best = d; bestDist = Math.abs(d - den); }
+  }
+  return best;
+}
+
+// Returns histogram over within-split counts (indexed 0,1,2,...) and duplicate rate
+// hist[c] = total number of (point, split) pairs where point appeared c times in that split
+function simulateConfig(N, V, K) {
+  const totalSlots = K * V;
+  const base = Math.floor(totalSlots / N);
+  const remainder = totalSlots % N;
+
+  const pool = new Int32Array(totalSlots);
+  let idx = 0;
+  for (let i = 0; i < N; i++) {
+    const deg = i < remainder ? base + 1 : base;
+    for (let d = 0; d < deg; d++) pool[idx++] = i;
+  }
+
+  // Fisher-Yates shuffle
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+  }
+
+  // For each split, count how many times each point appears in that split
+  const hist = new Float64Array(10); // counts 0..9 (enough headroom)
+  let dupPairs = 0;
+
+  for (let k = 0; k < K; k++) {
+    // Count appearances within this split
+    const splitCount = new Int32Array(N);
+    for (let v = 0; v < V; v++) splitCount[pool[k * V + v]]++;
+
+    // Tally into histogram over all N points for this split
+    for (let i = 0; i < N; i++) {
+      const c = splitCount[i];
+      if (c < hist.length) hist[c]++;
+      if (c >= 2) dupPairs += c - 1; // excess appearances
+    }
+  }
+
+  const totalPairs = N * K;
+  return { hist, dupRate: dupPairs / totalPairs };
+}
+
+function simulateRandom(N, V, K) {
+  const indices = Array.from({ length: N }, (_, i) => i);
+  const hist = new Float64Array(10);
+  let dupPairs = 0;
+
+  for (let k = 0; k < K; k++) {
+    // Fisher-Yates to get V samples without replacement
+    for (let i = N - 1; i > N - V - 1; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = indices[i]; indices[i] = indices[j]; indices[j] = tmp;
+    }
+    // The last V elements are the sampled val set
+    // Since sampling without replacement, counts are always 0 or 1
+    // N-V points get count 0, V points get count 1
+    hist[0] += (N - V);
+    hist[1] += V;
+    // dupPairs always 0 for without-replacement
+  }
+
+  return { hist, dupRate: 0 };
+}
+
+function addHists(a, b) {
+  const out = new Float64Array(Math.max(a.length, b.length));
+  for (let i = 0; i < a.length; i++) out[i] += a[i];
+  for (let i = 0; i < b.length; i++) out[i] += b[i];
+  return out;
+}
+
+let chart = null;
+
+function render() {
+  const den = parseInt(document.getElementById('vSlider').value);
+  const K = parseInt(document.getElementById('kSlider').value);
+  const S = parseInt(document.getElementById('simSlider').value);
+
+  const bestDen = chooseDivisor(den);
+  const V = N / bestDen;
+
+  document.getElementById('kVal').textContent = K;
+  document.getElementById('vVal').textContent = `1/${bestDen} ≈ ${(100/bestDen).toFixed(1)}%`;
+  document.getElementById('simVal').textContent = S;
+  document.getElementById('sValSize').textContent = V.toLocaleString();
+  document.getElementById('sTrainSize').textContent = (N - V).toLocaleString();
+  document.getElementById('sizeNote').textContent = `N = 1,890 | val size = ${V} (1/${bestDen} of N) | K = ${K} splits | ${S} simulation(s). Each bar is averaged over K × ${S} = ${K*S} splits total.`;
+
+  // Run simulations, accumulate histograms
+  let cfgHist = new Float64Array(10);
+  let randHist = new Float64Array(10);
+  let cfgDupTotal = 0, randDupTotal = 0;
+
+  for (let s = 0; s < S; s++) {
+    const cr = simulateConfig(N, V, K);
+    const rr = simulateRandom(N, V, K);
+    cfgHist = addHists(cfgHist, cr.hist);
+    randHist = addHists(randHist, rr.hist);
+    cfgDupTotal += cr.dupRate;
+    randDupTotal += rr.dupRate;
+  }
+
+  // Normalize to average per (point, split) pair — divide by S*K*N... 
+  // Actually keep as average count of pairs per simulation
+  const totalPairsPerSim = N * K;
+  for (let i = 0; i < cfgHist.length; i++) {
+    cfgHist[i] /= S;
+    randHist[i] /= S;
+  }
+
+  const cfgDupRate = cfgDupTotal / S;
+  const randDupRate = randDupTotal / S;
+
+  document.getElementById('sCfgDup').textContent = cfgDupRate < 0.0001 ? '0' : (cfgDupRate * 100).toFixed(4) + '%';
+  document.getElementById('sRandDup').textContent = '0 (exact)';
+
+  // Config badge
+  const totalSlots = K * V;
+  const base = Math.floor(totalSlots / N);
+  const rem = totalSlots % N;
+  document.getElementById('configBadge').textContent = rem === 0
+    ? `each point in pool exactly ${base}×`
+    : `${N-rem} pts × ${base}, ${rem} pts × ${base+1} in pool`;
+
+  // Find max nonzero bin
+  let maxBin = 2;
+  for (let i = cfgHist.length - 1; i >= 2; i--) {
+    if (cfgHist[i] > 0.5 || randHist[i] > 0.5) { maxBin = i; break; }
+  }
+  const labels = Array.from({ length: maxBin + 1 }, (_, i) => i);
+
+  if (chart) { chart.destroy(); chart = null; }
+
+  const ctx = document.getElementById('chart');
+  chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Config model',
+          data: labels.map(i => cfgHist[i] || 0),
+          backgroundColor: 'rgba(55,138,221,0.75)',
+          borderColor: '#185FA5',
+          borderWidth: 0.5,
+          barPercentage: 0.7,
+        },
+        {
+          label: 'Simple random',
+          data: labels.map(i => randHist[i] || 0),
+          backgroundColor: 'rgba(212,83,126,0.55)',
+          borderColor: '#993556',
+          borderWidth: 0.5,
+          barPercentage: 0.7,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const v = ctx.raw;
+              const pct = (v / totalPairsPerSim * 100).toFixed(4);
+              return ` ${ctx.dataset.label}: avg ${v.toFixed(1)} pairs (${pct}% of N×K)`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: { display: true, text: 'Times point appears within a single split', font: { size: 12 }, color: '#888780' },
+          ticks: { font: { size: 11 }, color: '#888780', autoSkip: false, maxRotation: 0 },
+          grid: { color: 'rgba(136,135,128,0.15)' }
+        },
+        y: {
+          title: { display: true, text: 'Avg (point, split) pairs', font: { size: 12 }, color: '#888780' },
+          ticks: { font: { size: 11 }, color: '#888780' },
+          grid: { color: 'rgba(136,135,128,0.15)' }
+        }
+      },
+      animation: { duration: 150 }
+    }
+  });
+
+  // Duplicate note
+  const expectedDups = (V * V) / (2 * N);
+  document.getElementById('dupNote').textContent = cfgDupRate < 0.0001
+    ? `No within-split duplicates observed. Simple random splits have exactly 0 duplicates by construction (sampling without replacement). Config model pool size = ${totalSlots}; with V=${V} and N=${N}, birthday-problem collision probability ≈ ${(expectedDups).toFixed(3)} expected duplicate pairs per split.`
+    : `Config model: ${(cfgDupRate * totalPairsPerSim).toFixed(2)} duplicate (point, split) pairs per simulation on average. Birthday-problem estimate: ≈${expectedDups.toFixed(3)} expected duplicate pairs per split.`;
+}
+
+document.getElementById('kSlider').addEventListener('input', render);
+document.getElementById('vSlider').addEventListener('input', render);
+document.getElementById('simSlider').addEventListener('input', render);
+document.getElementById('rerunBtn').addEventListener('click', render);
+
+render();
+</script>

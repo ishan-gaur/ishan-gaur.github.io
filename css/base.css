@@ -250,19 +250,15 @@ figure {
 }
 
 figcaption {
-    float: right;
-    clear: right;
-    margin-top: 0;
+    float: none;
+    clear: both;
+    margin-top: 0.8rem;
     margin-bottom: 0;
     font-size: 1.1rem;
     line-height: 1.6;
     vertical-align: baseline;
-    position: relative;
-    max-width: 40%;
-}
-
-figure.fullwidth figcaption {
-    margin-right: 24%;
+    position: static;
+    max-width: 100%;
 }
 
 a:link,
@@ -397,6 +393,20 @@ pre.fullwidth > code {
     width: 90%;
 }
 
+/* Prism compatibility: keep highlighted blocks in the main text column */
+section > pre[class*="language-"] {
+    width: 55%;
+    margin-left: 0;
+    margin-right: 0;
+    overflow-x: auto;
+}
+
+section > pre[class*="language-"] > code[class*="language-"] {
+    width: auto;
+    margin-left: 0;
+    display: block;
+}
+
 .fullwidth {
     max-width: 90%;
     clear: both;
@@ -451,6 +461,11 @@ label.margin-toggle:not(.sidenote-number) {
 
     pre > code {
         width: 97%;
+    }
+
+    section > pre[class*="language-"] {
+        width: 100%;
+        max-width: 100%;
     }
 
     section > dl,
