@@ -25,10 +25,14 @@
     </nav>
     <main>
         <article>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
+<script defer="" src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+
 <h1>ProteinGuide in Practice (Draft)</h1>
 
 <section>
-<p>This post assumes some basic familiarity with generative models, training regression/classification models, and Bayes' rule. <label for="sn-43" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-43" class="margin-toggle"><span class="sidenote">If you'd like a refresher, I wrote an <a href="./ddm-and-pg-intuition/">intuitive overview of ProteinGuide</a>. I will also be posting intuitive introductions to discrete diffusion and guidance on <a href="https://substack.com/@ishangaurr">my Substack</a> soon.</span> It is intended for people with some ML background who are interested in applying ProteinGuide to real projects.</p>
+<p>This post assumes some basic familiarity with generative models, training regression/classification models, and Bayes' rule. <label for="sn-45" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-45" class="margin-toggle"><span class="sidenote">If you'd like a refresher, I wrote an <a href="./ddm-and-pg-intuition/">intuitive overview of ProteinGuide</a>. I will also be posting intuitive introductions to discrete diffusion and guidance on <a href="https://substack.com/@ishangaurr">my Substack</a> soon.</span> It is intended for people with some ML background who are interested in applying ProteinGuide to real projects.</p>
 <p><label for="mn-12" class="margin-toggle"></label><input type="checkbox" id="mn-12" class="margin-toggle"><span class="marginnote">This is a living document in the literal sense: as we keep running projects, we will keep updating this playbook.</span></p>
 <p>What follows is our current framework in the Listgarten lab for making ProteinGuide work in practice. The first half is intentionally essay-like: a conceptual model for what ProteinGuide is trying to do and why different failures often have the same root cause. The second half switches into playbook mode: concrete interventions and a reasonable first-try workflow.</p>
 <p>At a high level, ProteinGuide is trying to sample from a task-conditional distribution:</p>

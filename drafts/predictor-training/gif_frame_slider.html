@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>GIF Frame Slider</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      background: #ffffff;
+      color: #1a1916;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 1.5rem;
+      box-sizing: border-box;
+    }
+    .viewer { width: 100%; }
+    .viewer input { width: 100%; }
+    .viewer img { width: 100%; height: auto; border: 1px solid #ccc; display: block; }
+    #lbl { margin: 8px 0; }
+  </style>
+</head>
+<body>
+  <div class="viewer">
+    <input id="s" type="range" min="0" max="106" value="0" step="1" />
+    <div id="lbl">Frame 1/107</div>
+    <div><img id="img" src="/drafts/predictor-training/gif_frames/frame_000.png" alt="Config vs random simulation frame slider"/></div>
+  </div>
+  <script>
+    const s = document.getElementById('s');
+    const img = document.getElementById('img');
+    const lbl = document.getElementById('lbl');
+    function upd() {
+      const i = Number(s.value);
+      img.src = `/drafts/predictor-training/gif_frames/frame_${String(i).padStart(3, '0')}.png`;
+      lbl.textContent = `Frame ${i+1}/107`;
+    }
+    s.addEventListener('input', upd);
+    upd();
+  </script>
+</body>
+</html>
