@@ -1,0 +1,323 @@
+
+<h2 class="sr-only">Distribution of total counts of each data point across all validation sets for an ensemble.</h2>
+
+<style>
+  /* Claude light mode CSS variables */
+  :root {
+    --color-text-primary: #1a1916;
+    --color-text-secondary: #6b6a65;
+    --color-text-tertiary: #9b9a95;
+    --color-text-info: #1a5fa8;
+    --color-text-warning: #92500a;
+
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f4f2;
+    --color-background-info: #ddeeff;
+    --color-background-warning: #fef3e2;
+
+    --border-radius-md: 8px;
+    --border-radius-sm: 4px;
+  }
+
+  body {
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 1.5rem;
+    box-sizing: border-box;
+  }
+
+  .ctrl-row { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+  .ctrl-label { font-size: 13px; color: var(--color-text-secondary); min-width: 120px; }
+  .ctrl-val { font-size: 13px; font-weight: 500; min-width: 90px; color: var(--color-text-primary); }
+  .chart-wrap { position: relative; width: 100%; }
+  .stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin: 1rem 0; }
+  .stat { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem 1rem; }
+  .stat-label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .stat-val { font-size: 18px; font-weight: 500; color: var(--color-text-primary); }
+  .section-head { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); margin: 1.25rem 0 0.5rem; letter-spacing: 0.03em; }
+  .legend { display: flex; gap: 20px; margin-bottom: 8px; font-size: 12px; color: var(--color-text-secondary); }
+  .legend span { display: flex; align-items: center; gap: 5px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+  .note { font-size: 11px; color: var(--color-text-tertiary); margin-top: 0.5rem; }
+  .warn { font-size: 11px; color: var(--color-text-warning); margin-top: 0.25rem; }
+  .info-badge { display:inline-block; font-size:11px; background:var(--color-background-info); color:var(--color-text-info); border-radius:var(--border-radius-md); padding: 2px 8px; margin-left:6px; }
+  .warn-badge { display:inline-block; font-size:11px; background:var(--color-background-warning); color:var(--color-text-warning); border-radius:var(--border-radius-md); padding: 2px 8px; margin-left:6px; }
+  button { cursor: pointer; }
+</style>
+
+<div style="padding: 1rem 0 0.5rem;">
+
+  <div class="ctrl-row">
+    <span class="ctrl-label">Num splits (K)</span>
+    <input type="range" id="kSlider" min="2" max="30" value="9" step="1" style="flex:1;">
+    <span class="ctrl-val" id="kVal">9</span>
+  </div>
+
+  <div class="ctrl-row">
+    <span class="ctrl-label">Val fraction</span>
+    <input type="range" id="vSlider" min="2" max="50" value="9" step="1" style="flex:1;">
+    <span class="ctrl-val" id="vVal">1/9 ≈ 11.1%</span>
+  </div>
+
+  <div class="ctrl-row">
+    <span class="ctrl-label">Simulations</span>
+    <input type="range" id="simSlider" min="1" max="50" value="10" step="1" style="flex:1;">
+    <span class="ctrl-val" id="simVal">10</span>
+  </div>
+
+  <div class="ctrl-row" style="gap:8px; margin-bottom:0.5rem;">
+    <button id="rerunBtn">Resample ↺</button>
+    <span class="info-badge" id="configBadge"></span>
+    <span class="warn-badge" id="warnBadge" style="display:none;"></span>
+  </div>
+
+  <p class="note" id="sizeNote"></p>
+
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-label">Val size</div><div class="stat-val" id="sValSize">—</div></div>
+    <div class="stat"><div class="stat-label">Train size</div><div class="stat-val" id="sTrainSize">—</div></div>
+    <div class="stat"><div class="stat-label">Config: variance</div><div class="stat-val" id="sCfgVar">—</div></div>
+    <div class="stat"><div class="stat-label">Random: variance</div><div class="stat-val" id="sRandVar">—</div></div>
+  </div>
+
+  <div class="section-head">Distribution of val-set appearances per datapoint (simulated)</div>
+  <div class="legend">
+    <span><span class="legend-dot" style="background:rgba(55,138,221,0.75);"></span>Configuration model</span>
+    <span><span class="legend-dot" style="background:rgba(212,83,126,0.55);"></span>Simple random</span>
+  </div>
+  <div class="chart-wrap"><canvas id="chart" role="img" aria-label="Histogram comparing simulated appearance counts for config model vs simple random splits"></canvas></div>
+
+  <div class="section-head">Config model: within-split duplicate rate</div>
+  <p class="note" id="dupNote"></p>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const N = 1890;
+
+function chooseDivisor(den) {
+  const divisors = [];
+  for (let d = 2; d <= 50; d++) if (N % d === 0) divisors.push(d);
+  let best = divisors[0], bestDist = Math.abs(divisors[0] - den);
+  for (const d of divisors) {
+    const dist = Math.abs(d - den);
+    if (dist < bestDist) { best = d; bestDist = dist; }
+  }
+  return best;
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// Config model: build a list where point i appears degree[i] times,
+// shuffle it, chunk into K groups of size V.
+// Returns { counts: Int32Array of length N, dupRate: fraction of splits with >=1 duplicate }
+function simulateConfig(N, V, K) {
+  const totalSlots = K * V;
+  const base = Math.floor(totalSlots / N);
+  const remainder = totalSlots % N; // first `remainder` points get base+1
+
+  // Build degree list
+  const pool = new Int32Array(totalSlots);
+  let idx = 0;
+  for (let i = 0; i < N; i++) {
+    const deg = i < remainder ? base + 1 : base;
+    for (let d = 0; d < deg; d++) pool[idx++] = i;
+  }
+
+  // Shuffle
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+  }
+
+  // Chunk into K splits of size V, count appearances and duplicates
+  const counts = new Int32Array(N);
+  let dupSplits = 0;
+  for (let k = 0; k < K; k++) {
+    const seen = new Set();
+    let hasDup = false;
+    for (let v = 0; v < V; v++) {
+      const pt = pool[k * V + v];
+      counts[pt]++;
+      if (seen.has(pt)) hasDup = true;
+      seen.add(pt);
+    }
+    if (hasDup) dupSplits++;
+  }
+
+  return { counts, dupRate: dupSplits / K };
+}
+
+// Simple random: for each of K splits, sample V points without replacement
+function simulateRandom(N, V, K) {
+  const counts = new Int32Array(N);
+  const indices = Array.from({ length: N }, (_, i) => i);
+  for (let k = 0; k < K; k++) {
+    shuffle(indices);
+    for (let v = 0; v < V; v++) counts[indices[v]]++;
+  }
+  return counts;
+}
+
+// Aggregate multiple simulations into a histogram over 0..K
+function aggregateCounts(countsArr, K) {
+  const hist = new Float64Array(K + 1);
+  for (const counts of countsArr) {
+    for (let i = 0; i < counts.length; i++) hist[counts[i]]++;
+  }
+  // Average over simulations
+  const S = countsArr.length;
+  for (let k = 0; k <= K; k++) hist[k] /= S;
+  return hist;
+}
+
+function variance(counts) {
+  const n = counts.length;
+  let mean = 0;
+  for (let i = 0; i < n; i++) mean += counts[i];
+  mean /= n;
+  let v = 0;
+  for (let i = 0; i < n; i++) v += (counts[i] - mean) ** 2;
+  return v / n;
+}
+
+let chart = null;
+
+function render() {
+  const den = parseInt(document.getElementById('vSlider').value);
+  const K = parseInt(document.getElementById('kSlider').value);
+  const S = parseInt(document.getElementById('simSlider').value);
+
+  const bestDen = chooseDivisor(den);
+  const V = N / bestDen;
+  const p = V / N;
+
+  document.getElementById('kVal').textContent = K;
+  document.getElementById('vVal').textContent = `1/${bestDen} ≈ ${(100/bestDen).toFixed(1)}%`;
+  document.getElementById('simVal').textContent = S;
+  document.getElementById('sValSize').textContent = V.toLocaleString();
+  document.getElementById('sTrainSize').textContent = (N - V).toLocaleString();
+  document.getElementById('sizeNote').textContent = `N = 1,890 | val size = ${V} (1/${bestDen} of N) | K = ${K} splits | averaged over ${S} simulation${S>1?'s':''}.`;
+
+  // Run simulations
+  const cfgResults = [], randResults = [];
+  let totalDupRate = 0;
+  for (let s = 0; s < S; s++) {
+    const { counts, dupRate } = simulateConfig(N, V, K);
+    cfgResults.push(counts);
+    totalDupRate += dupRate;
+    randResults.push(simulateRandom(N, V, K));
+  }
+  const avgDupRate = totalDupRate / S;
+
+  const cfgHist = aggregateCounts(cfgResults, K);
+  const randHist = aggregateCounts(randResults, K);
+
+  // Variance of last simulation's counts (representative)
+  const cfgVar = variance(cfgResults[cfgResults.length - 1]);
+  const randVar = variance(randResults[randResults.length - 1]);
+  document.getElementById('sCfgVar').textContent = cfgVar.toFixed(3);
+  document.getElementById('sRandVar').textContent = randVar.toFixed(3);
+
+  // Config model badge
+  const totalSlots = K * V;
+  const base = Math.floor(totalSlots / N);
+  const rem = totalSlots % N;
+  const isExact = rem === 0;
+  document.getElementById('configBadge').textContent = isExact
+    ? `all points appear exactly ${base}×`
+    : `${N-rem} pts × ${base}, ${rem} pts × ${base+1} (ideal)`;
+
+  // Duplicate warning
+  const warnBadge = document.getElementById('warnBadge');
+  if (avgDupRate > 0.001) {
+    warnBadge.style.display = 'inline-block';
+    warnBadge.textContent = `${(avgDupRate*100).toFixed(1)}% of splits have ≥1 within-split duplicate`;
+  } else {
+    warnBadge.style.display = 'none';
+  }
+
+  document.getElementById('dupNote').textContent = avgDupRate < 0.001
+    ? `No within-split duplicates detected across ${S} simulation(s). The shuffle produced valid splits.`
+    : `On average ${(avgDupRate*100).toFixed(2)}% of splits contained a point appearing more than once (a collision). This is the cost of the naive shuffle — a repair step or smarter construction would eliminate these.`;
+
+  // Build labels (only show 0..K)
+  const labels = Array.from({ length: K + 1 }, (_, i) => i);
+
+  if (chart) { chart.destroy(); chart = null; }
+
+  const ctx = document.getElementById('chart');
+  const wrapH = Math.max(220, Math.min(320, K * 8 + 140));
+  ctx.parentElement.style.height = wrapH + 'px';
+
+  chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Config model',
+          data: Array.from(cfgHist),
+          backgroundColor: 'rgba(55,138,221,0.75)',
+          borderColor: '#185FA5',
+          borderWidth: 0.5,
+          barPercentage: 0.7,
+        },
+        {
+          label: 'Simple random',
+          data: Array.from(randHist),
+          backgroundColor: 'rgba(212,83,126,0.55)',
+          borderColor: '#993556',
+          borderWidth: 0.5,
+          barPercentage: 0.7,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const v = ctx.raw;
+              const pct = (v / N * 100).toFixed(1);
+              return ` ${ctx.dataset.label}: avg ${v.toFixed(1)} pts (${pct}%)`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: { display: true, text: 'Times in val set (across K splits)', font: { size: 12 }, color: '#888780' },
+          ticks: { font: { size: 11 }, color: '#888780', autoSkip: false, maxRotation: 0 },
+          grid: { color: 'rgba(136,135,128,0.15)' }
+        },
+        y: {
+          title: { display: true, text: 'Avg number of datapoints', font: { size: 12 }, color: '#888780' },
+          ticks: { font: { size: 11 }, color: '#888780' },
+          grid: { color: 'rgba(136,135,128,0.15)' }
+        }
+      },
+      animation: { duration: 150 }
+    }
+  });
+}
+
+document.getElementById('kSlider').addEventListener('input', render);
+document.getElementById('vSlider').addEventListener('input', render);
+document.getElementById('simSlider').addEventListener('input', render);
+document.getElementById('rerunBtn').addEventListener('click', render);
+
+render();
+</script>

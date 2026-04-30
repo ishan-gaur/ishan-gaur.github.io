@@ -37,6 +37,8 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("misc");
   eleventyConfig.addPassthroughCopy("assets");
+  eleventyConfig.addPassthroughCopy("drafts/predictor-training/gif_frames");
+  eleventyConfig.addPassthroughCopy("drafts/predictor-training/gif_frame_slider.html");
   eleventyConfig.addPassthroughCopy("writing/using-proteinguide/esm-sampling-crop.mp4");
   eleventyConfig.addPassthroughCopy("CNAME");
 
