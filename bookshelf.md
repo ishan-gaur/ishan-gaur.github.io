@@ -34,6 +34,10 @@ The books I own or remember reading at some point, in no particular order. If I 
 - A Critical Survey of Indian Philosophy (Chandradhar Sharma){% sidenote "Recommended by [Vikas Divyakirti](https://www.youtube.com/watch?v=vCEDptvB5Q4)" %}
 - Sophie's World{% sidenote "Recommended by [Vikas Divyakirti](https://www.youtube.com/watch?v=vCEDptvB5Q4)" %}
 - The Age of Insight (Eric R. Kandel){% sidenote "Recommended by [Wei Ouyang](https://aicell.io/authors/wei/)" %}
+- The Billion-Dollar Molecule: One Company's Quest for the Perfect Drug (Barry Werth)
+- James: A Novel (Percival Everett)
+- The Importance of Being Educable: A New Theory of Human Uniqueness (Leslie Valiant)
+- A Universe from Nothing: Why There Is Something Rather Than Nothing (Lawrence M. Krauss)
 
 ## Reading List Links {#reading-list-links}
 
