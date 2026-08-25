@@ -36,6 +36,7 @@ export default function (eleventyConfig) {
   // Copying non-template content to _site
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("misc");
+  eleventyConfig.addPassthroughCopy("unlisted");
   eleventyConfig.addPassthroughCopy("assets");
   eleventyConfig.addPassthroughCopy("drafts/predictor-training/gif_frames");
   eleventyConfig.addPassthroughCopy("drafts/predictor-training/gif_frame_slider.html");
