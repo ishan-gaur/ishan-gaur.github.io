@@ -9,7 +9,7 @@ layout: base.liquid
 
 ## About
 
-Hi, I'm Ishan. {% marginnote "<img src='/assets/ishan.png' alt=''>" %} I'm a second-year PhD student at Berkeley AI Research, advised by [Jennifer Listgarten](http://www.jennifer.listgarten.com/). I work on generative models and agents for scientific discovery.
+Hi, I'm Ishan. {% marginnote "<img src='/assets/ishan.png' alt=''>" %} I'm a second-year PhD student at Berkeley AI Research, advised by [Jennifer Listgarten](http://www.jennifer.listgarten.com/). I work on generative models and agents for scientific discovery. This summer I'm at [Generate:Biomedicines](https://generatebiomedicines.com/) interning on the ML team.
 
 <!-- {% sidenote "I am also an <a href='https://peers.eecs.berkeley.edu/'>EECS Peer</a> and help run the <a href='https://bair.berkeley.edu/blog/'>BAIR Blog</a>." %} -->
 
@@ -23,6 +23,7 @@ Links:&emsp;<a href='https://x.com/Ishan__Gaur'>Twitter</a>&emsp;<a href='mailto
 
 ## What's New?
 
+- [7/29] [ProteinGuide]({{ proteinguide.data.paper_link }}) was published in Nature Biotechnology!
 - [4/27] Released [ProteinGen](https://ishan-gaur.github.io/proteingen/){% sidenote "ProteinGen is a package for leveraging wet-lab data in ML-based library design. It provides a simple interface for conditioning, finetuning, and sampling from all common sequence design models: ESM3, ProteinMPNN, ProGen3, etc. It provides several tools for effectively using coding agents for assembling and testing your library design pipeline." %} during Jenn's talk at the Broad.
 - [4/11] Put out a little [AF3 Fast API server](https://github.com/ishan-gaur/af3-server). It's intended to be used on SLURM machines and shared across users in a lab. That way one machine running one instance of AF3 can be used by everyone.
 - [2/23] Bear Xiong and I gave a talk on [ProteinGuide]({{ proteinguide.data.paper_link }}) at [Profluent](https://www.profluent.bio/)

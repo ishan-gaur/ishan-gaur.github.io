@@ -393,7 +393,10 @@ pre.fullwidth > code {
     width: 90%;
 }
 
-/* Prism compatibility: keep highlighted blocks in the main text column */
+/* Prism compatibility: keep fenced code blocks in the main text column.
+ * Markdown-it emits <pre><code class="language-..."></code></pre> (no class on <pre>),
+ * so target both plain <pre> and Prism's class-based variant. */
+section > pre,
 section > pre[class*="language-"] {
     width: 55%;
     margin-left: 0;
@@ -401,6 +404,7 @@ section > pre[class*="language-"] {
     overflow-x: auto;
 }
 
+section > pre > code,
 section > pre[class*="language-"] > code[class*="language-"] {
     width: auto;
     margin-left: 0;
@@ -463,6 +467,7 @@ label.margin-toggle:not(.sidenote-number) {
         width: 97%;
     }
 
+    section > pre,
     section > pre[class*="language-"] {
         width: 100%;
         max-width: 100%;
